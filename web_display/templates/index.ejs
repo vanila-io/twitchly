@@ -10,6 +10,7 @@
 	<p>Number of messages: <span id="nom"></span></p>
 	<p>Number of messages per minutes: <span id="nompm"></span></p>
 	<p>Most popular word: <span id="mpw"></span></p>
+	<p>Most active speaker: <span id="map"></span></p>
 
 	<h1>Channels stats</h1>
 
@@ -29,6 +30,7 @@
 	    	$('#nom').text(data.global['numberOfMessages']);
 	    	$('#nompm').text(data.global['numberOfMessagesPerMinute']);
 	    	$('#mpw').text(data.global['mostPopularKeyword']);
+	    	$('#map').text(data.global['mostActiveSpeaker']);
 
 	    	var channels = $('#channels');
 	    	channels.text('');
@@ -41,6 +43,7 @@
 			    channels.append('<p>Number of messages: ' + data.channels[channel].numberOfMessages + '</p>');
 				channels.append('<p>Number of messages per minutes: ' + data.channels[channel].numberOfMessagesPerMinute + '</p>');
 				channels.append('<p>Most popular word: ' + data.channels[channel].mostPopularKeyword + '</p>');
+				channels.append('<p>Most active speaker: ' + data.channels[channel].mostActiveSpeaker+ '</p>');
 			}
 	  	});
 

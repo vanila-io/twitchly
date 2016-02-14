@@ -20,6 +20,14 @@ let w = class WordStats
 		}
 	}
 
+	addWord(word)
+	{
+		if(this.words[word])
+			this.words[word] += 1;
+		else
+			this.words[word] = 1;
+	}
+
 	get mostPopular()
 	{
 		var _word;

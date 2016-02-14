@@ -10,6 +10,7 @@ let c = class ChannelStats
 		this.name = name;
 		this.messageCount = 0;
 		this.wordStats = new WordStats();
+		this.speakerStats = new WordStats;
 		this.chatSpeed = new ChatSpeed();
 	}
 
@@ -18,6 +19,7 @@ let c = class ChannelStats
 		this.messageCount += 1;
 
 		this.wordStats.computeMessage(message);
+		this.speakerStats.addWord(user['display-name']);
 		this.chatSpeed.addTick();
 	}
 
@@ -27,6 +29,7 @@ let c = class ChannelStats
 
 		o.numberOfMessages = this.messageCount;
 		o.mostPopularKeyword = this.wordStats.mostPopular;
+		o.mostActiveSpeaker = this.speakerStats.mostPopular;
 		o.numberOfMessagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
 
 		return o;

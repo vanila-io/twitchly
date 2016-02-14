@@ -2,12 +2,15 @@
 
 let s = function(statsManager)
 {
-	var app = require('express')();
+	var e = require('express');
+	var app = e();
 	var server = require('http').Server(app);
 	var io = require('socket.io')(server);
 
 	app.set('view engine', 'ejs')
 	app.set('views', __dirname + '/templates');
+
+	app.use(e.static(__dirname + '/public'));
 
 	server.listen(3000);
 

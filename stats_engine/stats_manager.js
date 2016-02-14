@@ -41,6 +41,7 @@ let s = class StatsManager extends EventEmitter
 		this.messageCount = 0;
 
 		this.wordStats = new WordStats;
+		this.speakerStats = new WordStats;
 		this.chatSpeed = new ChatSpeed;
 	}
 
@@ -51,6 +52,7 @@ let s = class StatsManager extends EventEmitter
 
 		o.global.numberOfMessages = this.messageCount;
 		o.global.mostPopularKeyword = this.wordStats.mostPopular;
+		o.global.mostActiveSpeaker = this.speakerStats.mostPopular;
 		o.global.numberOfMessagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
 
 		o.channels = {};
@@ -98,6 +100,7 @@ let s = class StatsManager extends EventEmitter
 		}
 
 		this.wordStats.computeMessage(message);
+		this.speakerStats.addWord(user['display-name']);
 		this.chatSpeed.addTick();
 	}
 }
