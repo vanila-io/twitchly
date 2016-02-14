@@ -46,6 +46,11 @@ let w = class WordStats
 
 		return _word;
 	}
+
+	reset()
+	{
+		this.words = {};
+	}
 }
 
 module.exports = w;

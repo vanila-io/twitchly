@@ -1,15 +1,17 @@
 "use strict";
 
 const EventEmitter = require('events');
-var irc = require("tmi.js");
+let irc = require("tmi.js");
 
-var ChannelStats = require('./channel_stats.js');
-var WordStats = require('./word_stats.js');
-var ChatSpeed = require('./chat_speed.js');
+let ChannelStats = require('./channel_stats.js');
+let WordStats = require('./word_stats.js');
+let ChatSpeed = require('./chat_speed.js');
+
+let Database = require('./../database/database.js');
 
 let s = class StatsManager extends EventEmitter
 {
-	constructor(username, password, debug)
+	constructor(username, password, debug, memoryTimeout)
 	{
 		super();
 
@@ -43,6 +45,13 @@ let s = class StatsManager extends EventEmitter
 		this.wordStats = new WordStats;
 		this.speakerStats = new WordStats;
 		this.chatSpeed = new ChatSpeed;
+
+		this.memoryTimeout = memoryTimeout ? memoryTimeout : 60000; // 60 seconds, 1 minutes (in millis)
+
+		setInterval(function()
+		{
+			self.flush();
+		}, this.memoryTimeout);
 	}
 
 	get datas()
@@ -102,6 +111,36 @@ let s = class StatsManager extends EventEmitter
 		this.wordStats.computeMessage(message);
 		this.speakerStats.addWord(user['display-name']);
 		this.chatSpeed.addTick();
+	}
+
+	flush()
+	{
+		for (let channel in this.channels)
+		{
+		    if(!this.channels.hasOwnProperty(channel)) continue;
+		    
+		    this.channels[channel].flush({from: Date.now() - this.memoryTimeout, to: Date.now()});
+		}
+
+		let o = {};
+		o.from = Date.now() - this.memoryTimeout;
+		o.to = Date.now();
+		o.numberOfMessages = this.messageCount;
+		o.numberOfMessagesPerMinutes = Math.round(this.chatSpeed.messagesByMinutes);
+		o.mostCommonWord = this.wordStats.mostPopular;
+		o.mostActiveSpeaker = this.speakerStats.mostPopular;
+
+		Database.addGlobalStats(o);
+
+		this.reset();
+	}
+
+	reset()
+	{
+		this.messageCount = 0;
+		this.wordStats.reset();
+		this.speakerStats.reset();
+		this.chatSpeed.reset();	
 	}
 }
 

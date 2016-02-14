@@ -45,6 +45,12 @@ let c = class ChatSpeed
 	{
 		return this.messagesByMinutes / 60;
 	}
+
+	reset()
+	{
+		this.tick = 0;
+		this.oldSpeed = -1;
+	}
 }
 
 module.exports = c;

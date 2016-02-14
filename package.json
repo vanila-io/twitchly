@@ -11,6 +11,7 @@
   "dependencies": {
     "ejs": "^2.4.1",
     "express": "^4.13.4",
+    "mongoose": "^4.4.3",
     "socket.io": "^1.4.5",
     "tmi.js": "0.0.26"
   }
