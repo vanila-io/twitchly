@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+	<title>Twitch stats</title>
+</head>
+<body>
+
+	<h1>Global stats</h1>
+	<p>Number of messages: <span id="nom"></span></p>
+	<p>Number of messages per minutes: <span id="nompm"></span></p>
+	<p>Most popular word: <span id="mpw"></span></p>
+
+	<h1>Channels stats</h1>
+
+	<p>Add a channel (need to begin with #): <input type="text" placeholder="#imote" id="channelName" /> <button type="button" id="addChannelButton">Add</button> </p>
+
+	<div id="channels">
+	</div>
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		var socket = io.connect('http://localhost:3000');
+		
+		socket.on('datas', function (data)
+		{
+	    	console.log(data);
+	    	
+	    	$('#nom').text(data.global['numberOfMessages']);
+	    	$('#nompm').text(data.global['numberOfMessagesPerMinute']);
+	    	$('#mpw').text(data.global['mostPopularKeyword']);
+
+	    	var channels = $('#channels');
+	    	channels.text('');
+
+	    	for (var channel in data.channels)
+			{
+			    if(!data.channels.hasOwnProperty(channel)) continue;
+			    
+			    channels.append('<h2>' + channel + '</h2>');
+			    channels.append('<p>Number of messages: ' + data.channels[channel].numberOfMessages + '</p>');
+				channels.append('<p>Number of messages per minutes: ' + data.channels[channel].numberOfMessagesPerMinute + '</p>');
+				channels.append('<p>Most popular word: ' + data.channels[channel].mostPopularKeyword + '</p>');
+			}
+	  	});
+
+	  	setInterval(function()
+	  	{
+	  		socket.emit('needDatas', {});
+	  	}, 100);
+
+	  	$('#addChannelButton').click(function()
+	  	{
+	  		socket.emit('addChannel', $('#channelName').prop('value'));
+	  	});
+	</script>
+
+</body>
+</html>
