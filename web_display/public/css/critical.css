@@ -1,0 +1,89 @@
+html,body{
+	margin:0;
+	padding:0;
+	height: 100%;
+	width:100%;
+}
+
+.siteWrapper{
+	overflow-x:hidden;
+	height: 100%;
+	font-family: 'Josefin Sans', sans-serif;
+}
+
+.navbar-default {
+    background-color: transparent;
+    border-color: transparent;
+    border-radius: 0;
+    width: 85%;
+    margin:0 auto;
+    padding-top: 30px;
+}
+
+.header{
+	background: #FF7A60; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#FF7A60, #FF8F68); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#FF7A60, #FF8F68); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#FF7A60, #FF8F68); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#FF7A60, #FF8F68); /* Standard syntax */
+    height: 100%;
+}
+
+.navbar{
+height: 100px;
+margin-bottom: 0;
+}
+
+.navbar-default .navbar-nav > li > a, 
+.navbar-default .navbar-nav > li > a:focus, 
+.navbar-default .navbar-nav > li > a:hover{
+    color: #fff;
+    font-size: 1.8em;
+}
+
+.navbar-nav > li > a {
+    padding-top: 40px;
+    padding-bottom: 15px;
+}
+
+.headerCont{
+height: -webkit-calc(100% - 100px);
+height: -moz-calc(100% - 100px);
+height: calc(100% - 100px);
+display: table;
+width:85%;
+margin:0 auto;
+}
+
+.headerCont-inner{
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.headerCont-inner p{
+	text-align: center;
+	font-size: 3.4em;
+color: #fff;
+}
+
+.headerCont-inner img{
+	margin: 0px auto;
+display: block;
+width:25%;
+margin-top:30px;
+}
+.textBg{
+background-color: rgba(0, 0, 0, 0.1);
+height: 50px;
+display: inline-block;
+line-height: 0.9;
+}
+
+.glNumber, .glSpeed, .word{
+	font-weight: bold;
+}
+
+.glNumber{
+    margin-left: 10px;
+}
+

@@ -1,0 +1,28 @@
+@media screen and (max-width:1400px) {
+
+	.navbar-default{
+		padding-top: 10px;
+	}
+	.headerCont-inner p {
+    font-size: 2.8em;
+}
+
+.textBg{
+	height: 37px;
+}
+}
+
+@media screen and (max-width:960px) {
+	.headerCont-inner p {
+    font-size: 2.2em;
+}
+.headerCont-inner img{
+	width:28%;
+}
+}
+
+@media screen and (max-width:767px) {
+.navbar-brand > img{
+	width:80%;
+}
+}
