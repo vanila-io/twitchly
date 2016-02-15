@@ -126,6 +126,7 @@ let s = class StatsManager extends EventEmitter
 			this.message.channel = channel;
 			this.message.user = user;
 			this.message.message = message;
+			this.message.date = Date.now();
 		}
 	}
 
