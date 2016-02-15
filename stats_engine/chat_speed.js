@@ -5,7 +5,7 @@ let c = class ChatSpeed
 	constructor()
 	{
 		this.tick = 0;
-		this.oldSpeed = -1;
+		this.oldSpeed = 0;
 	}
 
 	addTick()
@@ -49,7 +49,7 @@ let c = class ChatSpeed
 	reset()
 	{
 		this.tick = 0;
-		this.oldSpeed = -1;
+		this.oldSpeed = 0;
 	}
 }
 

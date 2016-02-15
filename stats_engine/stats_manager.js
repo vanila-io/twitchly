@@ -48,6 +48,10 @@ let s = class StatsManager extends EventEmitter
 
 		this.memoryTimeout = memoryTimeout ? memoryTimeout : 60000; // 60 seconds, 1 minutes (in millis)
 
+		this.message = {};
+		this.message.date = -1;
+
+
 		setInterval(function()
 		{
 			self.flush();
@@ -74,6 +78,11 @@ let s = class StatsManager extends EventEmitter
 		}
 
 		return o;
+	}
+
+	get lastMessage()
+	{
+		return this.message;
 	}
 
 	connect()
@@ -111,6 +120,13 @@ let s = class StatsManager extends EventEmitter
 		this.wordStats.computeMessage(message);
 		this.speakerStats.addWord(user['display-name']);
 		this.chatSpeed.addTick();
+
+		if(this.message.date === -1 || Date.now() - this.message.date > 500)
+		{
+			this.message.channel = channel;
+			this.message.user = user;
+			this.message.message = message;
+		}
 	}
 
 	flush()

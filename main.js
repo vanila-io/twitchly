@@ -13,7 +13,7 @@ Database.connect();
 
 s.on('connected', function()
 {
-s.addChannel('#summonersinnlive');
+	s.addChannel('#summonersinnlive');
 });
 
 s.connect();

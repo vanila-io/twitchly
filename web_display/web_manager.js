@@ -26,6 +26,11 @@ let s = function(statsManager)
 			socket.emit('datas', statsManager.datas);
 		});
 
+		socket.on('needMessage', function(data)
+		{
+			socket.emit('message', statsManager.lastMessage);
+		});
+
 		socket.on('addChannel', function(channel)
 		{
 			statsManager.addChannel(channel);

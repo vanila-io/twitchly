@@ -55,6 +55,9 @@
 	<p>Most popular word: <span id="mpw"></span></p>
 	<p>Most active speaker: <span id="map"></span></p>
 
+	<h1>Ten last messages</h1>
+	<div id="lastMessages"></div>
+
 	<h1>Channels stats</h1>
 
 	<p>Add a channel (need to begin with #): <input type="text" placeholder="#imote" id="channelName" /> <button type="button" id="addChannelButton">Add</button> </p>
@@ -69,8 +72,13 @@
 
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
-		var socket = io.connect('https://localhost:3000');
+		var socket = io.connect('http://localhost:3000');
+		var numberOfMessagesDisplayed = 10;
+		var timeBetweenNewMessage = 1000;
 		
+		var lastId = 0;
+		var lastMessage = '';
+
 		socket.on('datas', function (data)
 		{
 	    	$('#nom').text(data.global['numberOfMessages']);
@@ -93,10 +101,31 @@
 			}
 	  	});
 
+	  	socket.on('message', function(message)
+	  	{
+	  		if(lastMessage == message.message)
+	  			return;
+
+	  		lastMessage = message.message;
+	  		lastId += 1;
+	  		var div = $('#lastMessages');
+	  		var string = '<div id="message-' + lastId + '">';
+	  		string += '<' + message.channel + '> ';
+	  		string += '<strong>' + message.user['display-name'] + '</strong>: ';
+	  		string += message.message + '<br /></div>';
+	  		div.html(string + div.html());
+	  		$('#message-' + (lastId - numberOfMessagesDisplayed)).remove();
+	  	})
+
 	  	setInterval(function()
 	  	{
 	  		socket.emit('needDatas', {});
 	  	}, 100);
+
+	  	setInterval(function()
+	  	{
+	  		socket.emit('needMessage', {});
+	  	}, timeBetweenNewMessage);
 
 	  	$('#addChannelButton').click(function()
 	  	{
