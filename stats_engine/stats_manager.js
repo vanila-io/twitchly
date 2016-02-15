@@ -62,19 +62,21 @@ let s = class StatsManager extends EventEmitter
 	{
 		const o = {};
 		o.global = {};
+		o.global.now = {};
 
-		o.global.numberOfMessages = this.messageCount;
-		o.global.mostPopularKeyword = this.wordStats.mostPopular;
-		o.global.mostActiveSpeaker = this.speakerStats.mostPopular;
-		o.global.numberOfMessagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
+		o.global.now.numberOfMessages = this.messageCount;
+		o.global.now.mostPopularKeyword = this.wordStats.mostPopular;
+		o.global.now.mostActiveSpeaker = this.speakerStats.mostPopular;
+		o.global.now.numberOfMessagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
 
 		o.channels = {};
+		o.channels.now = {}
 
 		for (let channel in this.channels)
 		{
 		    if(!this.channels.hasOwnProperty(channel)) continue;
 		    
-		    o.channels[channel] = this.channels[channel].datas;
+		    o.channels.now[channel] = this.channels[channel].datas;
 		}
 
 		return o;
@@ -143,7 +145,7 @@ let s = class StatsManager extends EventEmitter
 		o.from = Date.now() - this.memoryTimeout;
 		o.to = Date.now();
 		o.numberOfMessages = this.messageCount;
-		o.numberOfMessagesPerMinutes = Math.round(this.chatSpeed.messagesByMinutes);
+		o.numberOfMessagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
 		o.mostCommonWord = this.wordStats.mostPopular;
 		o.mostActiveSpeaker = this.speakerStats.mostPopular;
 

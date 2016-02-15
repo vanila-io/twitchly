@@ -44,7 +44,7 @@ let c = class ChannelStats
 		o.to = interval.to;
 		o.channelName = this.name;
 		o.numberOfMessages = this.messageCount;
-		o.numberOfMessagesPerMinutes = Math.round(this.chatSpeed.messagesByMinutes);
+		o.numberOfMessagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
 		o.mostCommonWord = this.wordStats.mostPopular;
 		o.mostActiveSpeaker = this.speakerStats.mostPopular;
 

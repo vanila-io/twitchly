@@ -4,13 +4,11 @@ let mongoose = require('mongoose');
 
 let ChannelStats = new mongoose.Schema(
 {
-	from: Date,
-	to: {type: Date, default: Date.now()},
-	channelName: String,
+	from: {type: Date, default: Date.now()},
+	totalTime: {type: Number, default: 0}, // In seconds NOT IN MILLIS (else we will overflow too fast)
+	name: String,
 	numberOfMessages: {type: Number, default: 0},
-	numberOfMessagesPerMinutes: {type: Number, default: 0},
-	mostCommonWord: {type: String, default: ''},
-	mostActiveSpeaker: {type: String, default: ''},
+	numberOfMessagesPerMinute: {type: Number, default: 0},
 });
 
 module.exports = mongoose.model('ChannelStats', ChannelStats);

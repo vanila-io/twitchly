@@ -13,7 +13,9 @@ Database.connect();
 
 s.on('connected', function()
 {
-	s.addChannel('#summonersinnlive');
+	s.addChannel('#moonducktv');
+	s.addChannel('#nightblue3');
+	s.addChannel('#dota2ruhub');
 });
 
 s.connect();

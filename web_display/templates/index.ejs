@@ -41,18 +41,17 @@
 		<div class="headerCont">
 		<div class="headerCont-inner">
 
-			<p>Total <span class="textBg">messages </span><span class="glNumber" id="nom"></span> started counting on <span class="date">14.Feb.2016</span></p>
-			<p>Average Twitch <span class="textBg">speed</span> is <span class="glSpeed" id="nompm"></span> m/m</p>
+			<p>Total <span class="textBg">messages </span><span class="glNumber" id="nom2"></span> started counting on <span class="date">14.Feb.2016</span></p>
+			<p>Average Twitch <span class="textBg">speed</span> is <span class="glSpeed" id="nompm2"></span> m/m</p>
 			<p>Most typed <span class="textBg">word</span> is <span class="word" id="mpw"></span></p>
 			<img src="img/graphic.png" alt="">
 		</div>
 		</div>
 	</div>
 
-	<h1>Global stats</h1>
+	<h1>Global stats (realtime)</h1>
 	<p>Number of messages: <span id="nom"></span></p>
 	<p>Number of messages per minutes: <span id="nompm"></span></p>
-	<p>Most popular word: <span id="mpw"></span></p>
 	<p>Most active speaker: <span id="map"></span></p>
 
 	<h1>Ten last messages</h1>
@@ -81,23 +80,28 @@
 
 		socket.on('datas', function (data)
 		{
-	    	$('#nom').text(data.global['numberOfMessages']);
-	    	$('#nompm').text(data.global['numberOfMessagesPerMinute']);
-	    	$('#mpw').text(data.global['mostPopularKeyword']);
-	    	$('#map').text(data.global['mostActiveSpeaker']);
+	    	$('#nom').text(data.global.now['numberOfMessages']);
+	    	$('#nompm').text(data.global.now['numberOfMessagesPerMinute']);
+	    	$('#mpw').text(data.global.now['mostPopularKeyword']);
+	    	$('#map').text(data.global.now['mostActiveSpeaker']);
+
+	    	$('#nom2').text(data.global.overall['numberOfMessages']);
+	    	$('#nompm2').text(data.global.overall['numberOfMessagesPerMinute']);
 
 	    	var channels = $('#channels');
 	    	channels.text('');
 
-	    	for (var channel in data.channels)
+	    	for (var channel in data.channels.now)
 			{
-			    if(!data.channels.hasOwnProperty(channel)) continue;
+			    if(!data.channels.now.hasOwnProperty(channel)) continue;
 			    
 			    channels.append('<h2>' + channel + '</h2>');
-			    channels.append('<p>Number of messages: ' + data.channels[channel].numberOfMessages + '</p>');
-				channels.append('<p>Number of messages per minutes: ' + data.channels[channel].numberOfMessagesPerMinute + '</p>');
-				channels.append('<p>Most popular word: ' + data.channels[channel].mostPopularKeyword + '</p>');
-				channels.append('<p>Most active speaker: ' + data.channels[channel].mostActiveSpeaker+ '</p>');
+			    channels.append('<p>Number of messages: ' + data.channels.now[channel].numberOfMessages + '</p>');
+				channels.append('<p>Number of messages per minutes: ' + data.channels.now[channel].numberOfMessagesPerMinute + '</p>');
+				channels.append('<p>Most popular word: ' + data.channels.now[channel].mostPopularKeyword + '</p>');
+				channels.append('<p>Most active speaker: ' + data.channels.now[channel].mostActiveSpeaker+ '</p>');
+				channels.append('<p>Total number of messages: ' + data.channels.overall[channel].numberOfMessages + '</p>');
+				channels.append('<p>Average speed (since ever): ' + data.channels.overall[channel].numberOfMessagesPerMinute + '</p>');
 			}
 	  	});
 

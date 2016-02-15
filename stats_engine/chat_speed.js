@@ -24,8 +24,6 @@ let c = class ChatSpeed
 			this.addTick();
 			return;
 		}
-
-		this.speed;
 	}
 
 	get messagesByMinutes()
