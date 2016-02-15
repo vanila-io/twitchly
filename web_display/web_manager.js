@@ -18,7 +18,13 @@ let s = function(statsManager)
 
 	app.get('/', function(req, res) 
 	{
-		res.render('index', { title: 'Hey', message: 'Hello there!'});
+		res.render('index', {});
+	});
+
+	app.get('/:channelName', function(req, res)
+	{
+		console.log(req.params);
+		res.render('channel', { channelName: req.params.channelName });
 	});
 
 	io.on('connection', function(socket)
@@ -39,7 +45,7 @@ let s = function(statsManager)
 					{
 						datas.channels.overall[c.name] = {};
 						datas.channels.overall[c.name].numberOfMessages = c.numberOfMessages;
-						datas.channels.overall[c.name].numberOfMessagesPerMinute = c.numberOfMessagesPerMinute;
+						datas.channels.overall[c.name].messagesPerMinute = c.messagesPerMinute;
 						datas.channels.overall[c.name].totalTime = c.totalTime;
 						datas.channels.overall[c.name].from = c.from;
 					}
@@ -49,6 +55,29 @@ let s = function(statsManager)
 
 			});
 
+		});
+
+		socket.on('needChannelDatas', function(channelName)
+		{
+			Database.retrieveChannelStat(channelName, function(err, doc)
+			{
+				if(err)
+					throw error;
+
+				if(!doc)
+					return;
+
+				let realtimeStat = statsManager.getChannelDatas(channelName);
+
+				let o = {};
+				o.numberOfMessages = doc.numberOfMessages + realtimeStat.numberOfMessages;
+				o.messagesPerMinute = realtimeStat.messagesPerMinute;
+				o.averageMessagePerMinute = doc.messagesPerMinute;
+				o.mostActiveSpeaker = realtimeStat.mostActiveSpeaker;
+				o.mostPopularWord = realtimeStat.mostPopularWord;
+
+				socket.emit('datas', o);
+			});
 		});
 
 		socket.on('needMessage', function(data)

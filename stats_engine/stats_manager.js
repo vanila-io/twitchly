@@ -65,9 +65,9 @@ let s = class StatsManager extends EventEmitter
 		o.global.now = {};
 
 		o.global.now.numberOfMessages = this.messageCount;
-		o.global.now.mostPopularKeyword = this.wordStats.mostPopular;
+		o.global.now.mostPopularWord = this.wordStats.mostPopular;
 		o.global.now.mostActiveSpeaker = this.speakerStats.mostPopular;
-		o.global.now.numberOfMessagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
+		o.global.now.messagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
 
 		o.channels = {};
 		o.channels.now = {}
@@ -80,6 +80,11 @@ let s = class StatsManager extends EventEmitter
 		}
 
 		return o;
+	}
+
+	getChannelDatas(channelName)
+	{
+		return this.channels[channelName] ? this.channels[channelName].datas : null;
 	}
 
 	get lastMessage()
@@ -145,7 +150,7 @@ let s = class StatsManager extends EventEmitter
 		o.from = Date.now() - this.memoryTimeout;
 		o.to = Date.now();
 		o.numberOfMessages = this.messageCount;
-		o.numberOfMessagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
+		o.messagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
 		o.mostCommonWord = this.wordStats.mostPopular;
 		o.mostActiveSpeaker = this.speakerStats.mostPopular;
 

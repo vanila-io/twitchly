@@ -8,7 +8,7 @@ let ChannelStats = new mongoose.Schema(
 	totalTime: {type: Number, default: 0}, // In seconds NOT IN MILLIS (else we will overflow too fast)
 	name: String,
 	numberOfMessages: {type: Number, default: 0},
-	numberOfMessagesPerMinute: {type: Number, default: 0},
+	messagesPerMinute: {type: Number, default: 0},
 });
 
 module.exports = mongoose.model('ChannelStats', ChannelStats);

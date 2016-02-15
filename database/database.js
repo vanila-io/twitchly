@@ -41,7 +41,7 @@ let d = class Database
 		stat.from = datas.from;
 		stat.to = datas.to;
 		stat.numberOfMessages = datas.numberOfMessages;
-		stat.numberOfMessagesPerMinute = datas.numberOfMessagesPerMinute;
+		stat.messagesPerMinute = datas.messagesPerMinute;
 		stat.mostCommonWord = datas.mostCommonWord;
 		stat.mostActiveSpeaker = datas.mostActiveSpeaker;
 
@@ -59,7 +59,7 @@ let d = class Database
 			let t = datas.to / 1000;
 
 			doc.numberOfMessages += datas.numberOfMessages;
-			doc.numberOfMessagesPerMinute = Math.round(((doc.numberOfMessagesPerMinute * doc.totalTime + (datas.numberOfMessagesPerMinute * (t - f))) / (doc.totalTime + (t - f))));
+			doc.messagesPerMinute = Math.round(((doc.messagesPerMinute * doc.totalTime + (datas.messagesPerMinute * (t - f))) / (doc.totalTime + (t - f))));
 			doc.totalTime = doc.totalTime + (t - f);
 			doc.save(function(err){ if(err) throw err; console.log('Global saved!');});
 		});
@@ -72,7 +72,7 @@ let d = class Database
 		stat.to = datas.to;
 		stat.channelName = datas.channelName;
 		stat.numberOfMessages = datas.numberOfMessages;
-		stat.numberOfMessagesPerMinute = datas.numberOfMessagesPerMinute;
+		stat.messagesPerMinute = datas.messagesPerMinute;
 		stat.mostCommonWord = datas.mostCommonWord;
 		stat.mostActiveSpeaker = datas.mostActiveSpeaker;
 
@@ -99,7 +99,7 @@ let d = class Database
 			let t = datas.to / 1000;
 
 			doc.numberOfMessages += datas.numberOfMessages;
-			doc.numberOfMessagesPerMinute = Math.round(((doc.numberOfMessagesPerMinute * doc.totalTime + (datas.numberOfMessagesPerMinute * (t - f))) / (doc.totalTime + (t - f))));
+			doc.messagesPerMinute = Math.round(((doc.messagesPerMinute * doc.totalTime + (datas.messagesPerMinute * (t - f))) / (doc.totalTime + (t - f))));
 			doc.totalTime = doc.totalTime + (t - f);
 			doc.save(function(err){ if(err) throw err; console.log('Saved2!');});
 		});

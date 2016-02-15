@@ -30,9 +30,9 @@ let c = class ChannelStats
 		const o = {};
 
 		o.numberOfMessages = this.messageCount;
-		o.mostPopularKeyword = this.wordStats.mostPopular;
+		o.mostPopularWord = this.wordStats.mostPopular;
 		o.mostActiveSpeaker = this.speakerStats.mostPopular;
-		o.numberOfMessagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
+		o.messagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
 
 		return o;
 	}
@@ -44,7 +44,7 @@ let c = class ChannelStats
 		o.to = interval.to;
 		o.channelName = this.name;
 		o.numberOfMessages = this.messageCount;
-		o.numberOfMessagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
+		o.messagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
 		o.mostCommonWord = this.wordStats.mostPopular;
 		o.mostActiveSpeaker = this.speakerStats.mostPopular;
 

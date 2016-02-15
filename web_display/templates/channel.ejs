@@ -1,0 +1,31 @@
+<%- include('header') -%>
+
+<h1>#<%= channelName %> stats</h1>
+
+<p>Number of messages: <span id="numberOfMessages"></span></p>
+<p>Actual speed (message/minute): <span id="messagesPerMinute"></span></p>
+<p>Average speed: <span id="averageSpeed"></span></p>
+<p>Most active speaker: <span id="mostActiveSpeaker"></span></p>
+<p>Most popular word: <span id="mostPopularWord"></span></p>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+	
+	var socket = io.connect('http://localhost:3000');
+
+	socket.on('datas', function(datas)
+	{
+		$('#numberOfMessages').text(datas.numberOfMessages);
+		$('#messagesPerMinute').text(datas.messagesPerMinute ? datas.messagesPerMinute : 'Too slow!');
+		$('#averageSpeed').text(datas.averageMessagePerMinute);
+		$('#mostActiveSpeaker').text(datas.mostActiveSpeaker);
+		$('#mostPopularWord').text(datas.mostPopularWord);
+	});
+
+	setInterval(function()
+	{
+		socket.emit('needChannelDatas', '#<%= channelName %>');
+	}, 100);
+
+
+</script>

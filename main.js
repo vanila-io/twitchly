@@ -16,6 +16,13 @@ s.on('connected', function()
 	s.addChannel('#moonducktv');
 	s.addChannel('#nightblue3');
 	s.addChannel('#dota2ruhub');
+	s.addChannel('#lirik');
+	s.addChannel('#sodapoppin');
+	s.addChannel('#mushisgosu');
+	s.addChannel('#trumpsc');
+	s.addChannel('#arteezy');
+	s.addChannel('#esl_csgo');
+	s.addChannel('#summit1g');
 });
 
 s.connect();
