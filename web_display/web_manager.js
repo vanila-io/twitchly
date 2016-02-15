@@ -12,7 +12,7 @@ let s = function(statsManager)
 
 	app.use(e.static(__dirname + '/public'));
 
-	server.listen(3000);
+	server.listen(8080);
 
 	app.get('/', function(req, res) 
 	{

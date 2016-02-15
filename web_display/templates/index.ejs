@@ -21,12 +21,10 @@
 
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
-		var socket = io.connect('http://localhost:3000');
+		var socket = io.connect('https://twitter-imote.c9users.io:8080');
 		
 		socket.on('datas', function (data)
 		{
-	    	console.log(data);
-	    	
 	    	$('#nom').text(data.global['numberOfMessages']);
 	    	$('#nompm').text(data.global['numberOfMessagesPerMinute']);
 	    	$('#mpw').text(data.global['mostPopularKeyword']);
@@ -54,7 +52,7 @@
 
 	  	$('#addChannelButton').click(function()
 	  	{
-	  		socket.emit('addChannel', $('#channelName').prop('value'));
+	  		socket.emit('addChannel', $('#channelName').prop('value').toLowerCase());
 	  	});
 	</script>
 
