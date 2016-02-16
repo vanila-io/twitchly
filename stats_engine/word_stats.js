@@ -9,10 +9,13 @@ let w = class WordStats
 
 	computeMessage(message)
 	{
-		var words = message.split(' ');
+		let words = message.split(' ');
 
 		for(let word of words)
 		{
+			if(!this.isWordComputable(word))
+				continue;
+
 			if(this.words[word])
 				this.words[word] += 1;
 			else
@@ -22,6 +25,9 @@ let w = class WordStats
 
 	addWord(word)
 	{
+		if(!this.isWordComputable(word))
+			return;
+
 		if(this.words[word])
 			this.words[word] += 1;
 		else
@@ -30,8 +36,8 @@ let w = class WordStats
 
 	get mostPopular()
 	{
-		var _word;
-		var _score = 0;
+		let _word;
+		let _score = 0;
 
 		for (let word in this.words)
 		{
@@ -45,6 +51,14 @@ let w = class WordStats
 		}
 
 		return _word;
+	}
+
+	isWordComputable(word)
+	{
+		if(!word || word == null || word === 'null')
+			return false;
+
+		return true;
 	}
 
 	reset()

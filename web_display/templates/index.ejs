@@ -69,7 +69,7 @@
 	    	$('#mpw').text(data.global.now['mostPopularWord']);
 	    	$('#map').text(data.global.now['mostActiveSpeaker']);
 
-	    	$('#nom2').text(data.global.overall['numberOfMessages']);
+	    	$('#nom2').text(data.global.overall['numberOfMessages'] + data.global.now['numberOfMessages']);
 	    	$('#nompm2').text(data.global.overall['messagesPerMinute']);
 
 	    	var channels = $('#channels');
@@ -99,7 +99,10 @@
 	  		var div = $('#lastMessages');
 	  		var string = '<div id="message-' + lastId + '">';
 	  		string += '<' + message.channel + '> ';
-	  		string += '<strong>' + message.user['display-name'] + '</strong>: ';
+	  		if(!message.user['display-name'] || message.user['display-name'] == null || message.user['display-name'] === 'null')
+	  			string += '<strong>' + message.user['username']  + '</strong>: ';	
+	  		else
+	  			string += '<strong>' + message.user['display-name']  + '</strong>: ';
 	  		string += message.message + '<br /></div>';
 	  		div.html(string + div.html());
 	  		$('#message-' + (lastId - numberOfMessagesDisplayed)).remove();
