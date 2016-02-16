@@ -33,33 +33,13 @@ let s = function(statsManager)
 		{
 			let datas = statsManager.datas;
 
-			Database.retrieveGlobalStat(function(err, doc)
-			{
-				datas.global.overall = doc;
-
-				Database.retrieveChannelStat(function(err, docs)
-				{
-					datas.channels.overall = {};
-
-					for(let c of docs)
-					{
-						datas.channels.overall[c.name] = {};
-						datas.channels.overall[c.name].numberOfMessages = c.numberOfMessages;
-						datas.channels.overall[c.name].messagesPerMinute = c.messagesPerMinute;
-						datas.channels.overall[c.name].totalTime = c.totalTime;
-						datas.channels.overall[c.name].from = c.from;
-					}
-
-					socket.emit('datas', datas);
-				});
-
-			});
+			socket.emit('datas', datas);
 
 		});
 
 		socket.on('needChannelDatas', function(channelName)
 		{
-			Database.retrieveChannelStat(channelName, function(err, doc)
+			Database.retrieveChannelStats(channelName, function(err, doc)
 			{
 				if(err)
 					throw error;
@@ -92,7 +72,7 @@ let s = function(statsManager)
 
 		socket.on('needChannelStat', function(name)
 		{
-			Database.retrieveChannelStat(name, function(err, doc)
+			Database.retrieveChannelStats(name, function(err, doc)
 			{
 				if(err) return;
 

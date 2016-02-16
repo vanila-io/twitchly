@@ -35,7 +35,7 @@ let s = class StatsManager extends EventEmitter
 
 		this.client = new irc.client(options);
 		
-		var self = this;
+		let self = this;
 		this.client.on("chat", function(a, b, c, d){ self.onChat(a, b, c, d); });
 
 
@@ -51,6 +51,13 @@ let s = class StatsManager extends EventEmitter
 		this.message = {};
 		this.message.date = -1;
 
+		Database.retrieveGlobalStats(function(err, doc)
+		{
+			if(err)
+				throw err;
+
+			self.overallStats = doc;
+		});
 
 		setInterval(function()
 		{
@@ -69,14 +76,15 @@ let s = class StatsManager extends EventEmitter
 		o.global.now.mostActiveSpeaker = this.speakerStats.mostPopular;
 		o.global.now.messagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
 
+		o.global.overall = this.overallStats;
+
 		o.channels = {};
-		o.channels.now = {}
 
 		for (let channel in this.channels)
 		{
 		    if(!this.channels.hasOwnProperty(channel)) continue;
 		    
-		    o.channels.now[channel] = this.channels[channel].datas;
+		    o.channels[channel] = this.channels[channel].datas;
 		}
 
 		return o;
@@ -137,6 +145,7 @@ let s = class StatsManager extends EventEmitter
 		}
 	}
 
+	/* Save stats and reset realtime stats */
 	flush()
 	{
 		for (let channel in this.channels)
@@ -155,6 +164,14 @@ let s = class StatsManager extends EventEmitter
 		o.mostActiveSpeaker = this.speakerStats.mostPopular;
 
 		Database.addGlobalStats(o);
+
+		let f = o.from / 1000;
+		let t = o.to / 1000;
+
+		this.overallStats.numberOfMessages += o.numberOfMessages;
+		this.overallStats.messagesPerMinute = Math.round(((this.overallStats.messagesPerMinute * this.overallStats.totalTime + (o.messagesPerMinute * (t - f))) / (this.overallStats.totalTime + (t - f))));
+		this.overallStats.totalTime = this.overallStats.totalTime + (t - f);
+		this.overallStats.save(function(err){ if(err) throw err; console.log('Global saved!');});
 
 		this.reset();
 	}

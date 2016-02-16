@@ -4,6 +4,7 @@ let WordStats = require('./word_stats.js');
 let ChatSpeed = require('./chat_speed.js');
 
 let Database = require('./../database/database.js');
+let ChannelStats = require('./../database/channel_stats.js');
 
 let c = class ChannelStats
 {
@@ -14,6 +15,21 @@ let c = class ChannelStats
 		this.wordStats = new WordStats();
 		this.speakerStats = new WordStats;
 		this.chatSpeed = new ChatSpeed();
+
+		let self = this;
+
+		Database.retrieveChannelStats(this.name, function(err, doc)
+		{
+			if(doc)
+				self.overallStats = doc;
+
+			else
+			{
+				self.overallStats = new ChannelStats;
+				self.overallStats.name = self.name;
+				self.overallStats.save(function(err) { if(err) throw err; console.log('New channel saved!'); });
+			}
+		});
 	}
 
 	onChat(user, message, self)
@@ -28,11 +44,14 @@ let c = class ChannelStats
 	get datas()
 	{
 		const o = {};
+		o.now = {};
 
-		o.numberOfMessages = this.messageCount;
-		o.mostPopularWord = this.wordStats.mostPopular;
-		o.mostActiveSpeaker = this.speakerStats.mostPopular;
-		o.messagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
+		o.now.numberOfMessages = this.messageCount;
+		o.now.mostPopularWord = this.wordStats.mostPopular;
+		o.now.mostActiveSpeaker = this.speakerStats.mostPopular;
+		o.now.messagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
+
+		o.overall = this.overallStats;
 
 		return o;
 	}
@@ -49,6 +68,14 @@ let c = class ChannelStats
 		o.mostActiveSpeaker = this.speakerStats.mostPopular;
 
 		Database.addChannelStats(o);
+
+		let f = o.from / 1000;
+		let t = o.to / 1000;
+
+		this.overallStats.numberOfMessages += o.numberOfMessages;
+		this.overallStats.messagesPerMinute = Math.round(((this.overallStats.messagesPerMinute * this.overallStats.totalTime + (o.messagesPerMinute * (t - f))) / (this.overallStats.totalTime + (t - f))));
+		this.overallStats.totalTime = this.overallStats.totalTime + (t - f);
+		this.overallStats.save(function(err){ if(err) throw err; console.log('Saved2!');});
 
 		this.reset();
 	}

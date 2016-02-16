@@ -15,12 +15,12 @@ let d = class Database
 		Database.firstTimeRun();
 	}
 
-	static retrieveGlobalStat(callback)
+	static retrieveGlobalStats(callback)
 	{
 		GlobalStats.findOne({}, callback); // callback(err, doc)
 	}
 
-	static retrieveChannelStat(name, callback)
+	static retrieveChannelStats(name, callback)
 	{
 		if(callback)
 		{
@@ -53,7 +53,8 @@ let d = class Database
 			console.log('Saved!');
 		});
 
-		GlobalStats.findOne({}, function(err, doc)
+		// Deplaced in stats_manager.js. To test then delete
+		/*GlobalStats.findOne({}, function(err, doc)
 		{
 			let f = datas.from / 1000;
 			let t = datas.to / 1000;
@@ -62,7 +63,7 @@ let d = class Database
 			doc.messagesPerMinute = Math.round(((doc.messagesPerMinute * doc.totalTime + (datas.messagesPerMinute * (t - f))) / (doc.totalTime + (t - f))));
 			doc.totalTime = doc.totalTime + (t - f);
 			doc.save(function(err){ if(err) throw err; console.log('Global saved!');});
-		});
+		});*/
 	}
 
 	static addChannelStats(datas)
@@ -82,26 +83,6 @@ let d = class Database
 				return console.log(err);
 
 				console.log('Saved!');
-		});
-
-		ChannelStats.findOne({name: datas.channelName}, function(err, doc)
-		{
-			if(err)
-				throw err;
-
-			if(!doc)
-			{
-				doc = new ChannelStats();
-				doc.name = datas.channelName;
-			}
-
-			let f = datas.from / 1000;
-			let t = datas.to / 1000;
-
-			doc.numberOfMessages += datas.numberOfMessages;
-			doc.messagesPerMinute = Math.round(((doc.messagesPerMinute * doc.totalTime + (datas.messagesPerMinute * (t - f))) / (doc.totalTime + (t - f))));
-			doc.totalTime = doc.totalTime + (t - f);
-			doc.save(function(err){ if(err) throw err; console.log('Saved2!');});
 		});
 	}
 
