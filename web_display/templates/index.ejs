@@ -75,17 +75,17 @@
 	    	var channels = $('#channels');
 	    	channels.text('');
 
-	    	for (var channel in data.channels.now)
+	    	for (var channel in data.channels)
 			{
-			    if(!data.channels.now.hasOwnProperty(channel)) continue;
+			    if(!data.channels.hasOwnProperty(channel)) continue;
 			    
 			    channels.append('<h2><a href="/' + channel.substr(1) + '">' + channel + '</a></h2>');
-			    channels.append('<p>Number of messages: ' + data.channels.now[channel].numberOfMessages + '</p>');
-				channels.append('<p>Number of messages per minutes: ' + data.channels.now[channel].messagesPerMinute + '</p>');
-				channels.append('<p>Most popular word: ' + data.channels.now[channel].mostPopularWord + '</p>');
-				channels.append('<p>Most active speaker: ' + data.channels.now[channel].mostActiveSpeaker+ '</p>');
-				channels.append('<p>Total number of messages: ' + data.channels.overall[channel].numberOfMessages + '</p>');
-				channels.append('<p>Average speed (since ever): ' + data.channels.overall[channel].messagesPerMinute + '</p>');
+			    channels.append('<p>Number of messages: ' + data.channels[channel].now.numberOfMessages + '</p>');
+				channels.append('<p>Number of messages per minutes: ' + data.channels[channel].now.messagesPerMinute + '</p>');
+				channels.append('<p>Most popular word: ' + data.channels[channel].now.mostPopularWord + '</p>');
+				channels.append('<p>Most active speaker: ' + data.channels[channel].now.mostActiveSpeaker+ '</p>');
+				channels.append('<p>Total number of messages: ' + data.channels[channel].overall.numberOfMessages + '</p>');
+				channels.append('<p>Average speed (since ever): ' + data.channels[channel].overall.messagesPerMinute + '</p>');
 			}
 	  	});
 

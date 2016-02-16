@@ -15,11 +15,12 @@
 
 	socket.on('datas', function(datas)
 	{
-		$('#numberOfMessages').text(datas.numberOfMessages);
-		$('#messagesPerMinute').text(datas.messagesPerMinute ? datas.messagesPerMinute : 'Too slow!');
-		$('#averageSpeed').text(datas.averageMessagePerMinute);
-		$('#mostActiveSpeaker').text(datas.mostActiveSpeaker);
-		$('#mostPopularWord').text(datas.mostPopularWord);
+		console.log(datas);
+		$('#numberOfMessages').text(datas.now.numberOfMessages + datas.overall.numberOfMessages);
+		$('#messagesPerMinute').text(datas.now.messagesPerMinute ? datas.now.messagesPerMinute : 'Too slow!');
+		$('#averageSpeed').text(datas.overall.messagesPerMinute);
+		$('#mostActiveSpeaker').text(datas.now.mostActiveSpeaker);
+		$('#mostPopularWord').text(datas.now.mostPopularWord);
 	});
 
 	setInterval(function()

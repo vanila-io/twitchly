@@ -14,7 +14,7 @@ let s = function(statsManager)
 
 	app.use(e.static(__dirname + '/public'));
 
-	server.listen(3000);
+	server.listen(8080);
 
 	app.get('/', function(req, res) 
 	{
@@ -39,6 +39,10 @@ let s = function(statsManager)
 
 		socket.on('needChannelDatas', function(channelName)
 		{
+			let stats = statsManager.getChannelDatas(channelName);
+			
+			socket.emit('datas', stats);/*
+			
 			Database.retrieveChannelStats(channelName, function(err, doc)
 			{
 				if(err)
@@ -57,7 +61,7 @@ let s = function(statsManager)
 				o.mostPopularWord = realtimeStat.mostPopularWord;
 
 				socket.emit('datas', o);
-			});
+			});*/
 		});
 
 		socket.on('needMessage', function(data)
