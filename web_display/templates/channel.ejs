@@ -23,7 +23,7 @@
 	toDateInput.setNow();
 
 
-	var socket = io.connect('http://localhost:3000');
+	var socket = io.connect('https://twitter-imote.c9users.io/');
 	
 	$('#find').on('click', function()
 	{
@@ -48,6 +48,8 @@
 
 	socket.on('datas', function(datas)
 	{
+		if(!datas) return;
+		
 		$('#numberOfMessages').text(datas.now.numberOfMessages + datas.overall.numberOfMessages);
 		$('#messagesPerMinute').text(datas.now.messagesPerMinute ? datas.now.messagesPerMinute : 'Too slow!');
 		$('#averageSpeed').text(datas.overall.messagesPerMinute);

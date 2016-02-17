@@ -43,7 +43,7 @@
 
 	<h1>Channels stats</h1>
 
-	<p>Add a channel (need to begin with #): <input type="text" placeholder="#imote" id="channelName" /> <button type="button" id="addChannelButton">Add</button> </p>
+	<!-- <p>Add a channel (need to begin with #): <input type="text" placeholder="#imote" id="channelName" /> <button type="button" id="addChannelButton">Add</button> </p> -->
 
 	<div id="channels">
 	</div>
@@ -55,7 +55,7 @@
 
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
-		var socket = io.connect('http://localhost:3000');
+		var socket = io.connect('https://twitter-imote.c9users.io/');
 		var numberOfMessagesDisplayed = 10;
 		var timeBetweenNewMessage = 1000;
 		

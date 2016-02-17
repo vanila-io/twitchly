@@ -15,7 +15,7 @@ let s = class StatsManager extends EventEmitter
 	{
 		super();
 
-		let options = 
+		let mainOptions = 
 		{
 			options:
 			{
@@ -32,11 +32,31 @@ let s = class StatsManager extends EventEmitter
 				password: password,
 			},
 		};
+		
+		let eventOptions = 
+		{
+			options:
+			{
+				debug: debug,
+			},
+			connection:
+			{
+				cluster: "event",
+				reconnect: true,
+			},
+			identity:
+			{
+				username: username,
+				password: password,
+			},
+		};
 
-		this.client = new irc.client(options);
+		this.mainClient = new irc.client(mainOptions);
+		this.eventClient = new irc.client(eventOptions);
 		
 		let self = this;
-		this.client.on("chat", function(a, b, c, d){ self.onChat(a, b, c, d); });
+		this.mainClient.on("chat", function(a, b, c, d) { self.onChat(a, b, c, d); } );
+		this.eventClient.on("chat", function(a, b, c, d) { self.onChat(a, b, c, d); } );
 
 
 		this.channels = {};
@@ -63,6 +83,22 @@ let s = class StatsManager extends EventEmitter
 		{
 			self.flush();
 		}, this.memoryTimeout);
+		
+		this.mainClient.on('reconnect', function()
+		{
+			self.mainClient.on('connected', function()
+			{
+				self.emit('connected');	
+			});
+		});
+		
+		this.eventClient.on('reconnect', function()
+		{
+			self.eventClient.on('connected', function()
+			{
+				self.emit('connected');	
+			});
+		});
 	}
 
 	get datas()
@@ -104,11 +140,18 @@ let s = class StatsManager extends EventEmitter
 	{
 		const self = this;
 
-		this.client.connect().then(function(data)
+		this.mainClient.connect().then(function(data)
 		{
-			console.log('Connected.');
-			self.emit('connected');
-
+			
+			self.eventClient.connect().then(function(data2)
+			{
+				console.log('Connected.');
+				self.emit('connected');
+			}).catch(function(err)
+			{
+				console.log('Can not connect to Twitch IRC. ' + err);
+			});
+			
 		}).catch(function(err)
 		{
 			console.log('Can not connect to Twitch IRC. ' + err);
@@ -117,7 +160,8 @@ let s = class StatsManager extends EventEmitter
 
 	addChannel(name)
 	{
-		this.client.join(name);
+		this.mainClient.join(name);
+		this.eventClient.join(name);
 		const c = new ChannelStats(name);
 		this.channels[name] = c;
 	}

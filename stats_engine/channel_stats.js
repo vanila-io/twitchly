@@ -27,7 +27,6 @@ let c = class ChannelStats
 			{
 				self.overallStats = new ChannelStatsDatabase();
 				self.overallStats.name = self.name;
-				self.overallStats.save(function(err) { if(err) throw err; console.log('New channel saved!'); });
 			}
 		});
 	}
@@ -75,7 +74,7 @@ let c = class ChannelStats
 		this.overallStats.numberOfMessages += o.numberOfMessages;
 		this.overallStats.messagesPerMinute = Math.round(((this.overallStats.messagesPerMinute * this.overallStats.totalTime + (o.messagesPerMinute * (t - f))) / (this.overallStats.totalTime + (t - f))));
 		this.overallStats.totalTime = this.overallStats.totalTime + (t - f);
-		this.overallStats.save(function(err){ if(err) throw err; console.log('Saved2!');});
+		this.overallStats.save(function(err){ if(err) throw err;});
 
 		this.reset();
 	}
