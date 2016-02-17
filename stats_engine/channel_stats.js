@@ -4,7 +4,7 @@ let WordStats = require('./word_stats.js');
 let ChatSpeed = require('./chat_speed.js');
 
 let Database = require('./../database/database.js');
-let ChannelStats = require('./../database/channel_stats.js');
+let ChannelStatsDatabase = require('./../database/channel_stats.js');
 
 let c = class ChannelStats
 {
@@ -25,7 +25,7 @@ let c = class ChannelStats
 
 			else
 			{
-				self.overallStats = new ChannelStats;
+				self.overallStats = new ChannelStatsDatabase();
 				self.overallStats.name = self.name;
 				self.overallStats.save(function(err) { if(err) throw err; console.log('New channel saved!'); });
 			}

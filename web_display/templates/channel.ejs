@@ -8,14 +8,46 @@
 <p>Most active speaker: <span id="mostActiveSpeaker"></span></p>
 <p>Most popular word: <span id="mostPopularWord"></span></p>
 
+<p>From: <input type="datetime-local" id="from" name="from"></p>
+<p>To: <input type="datetime-local" id="to" name="to"></p>
+<p><button id="find">Find</button></p>
+<div id="intervalResult"></div>
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
 	
+	var fromDateInput = $('#from');
+	var toDateInput = $('#to');
+
+	fromDateInput.setNow();
+	toDateInput.setNow();
+
+
 	var socket = io.connect('http://localhost:3000');
+	
+	$('#find').on('click', function()
+	{
+		var fromDate = new Date(fromDateInput.val());
+		var toDate = new Date(toDateInput.val());
+		var o = {};
+		o.fromDate = fromDate;
+		o.toDate = toDate;
+		o.channelName = '#<%= channelName %>';
+
+		socket.emit('retrieveChannelStatsInInterval', o);
+	});
+
+	socket.on('channelStatsInInterval', function(result)
+	{
+		var div = $('#intervalResult');
+		div.text('');
+		div.append('<h4>Stats between ' + result.fromDate + ' to ' + result.toDate + '</h4>');
+		div.append('<p>Total number of messages: ' + result.numberOfMessages + '</p>');
+		div.append('<p>Average speed: ' + Math.round(result.messagesPerMinute) + ' m/m</p>');
+	});
 
 	socket.on('datas', function(datas)
 	{
-		console.log(datas);
 		$('#numberOfMessages').text(datas.now.numberOfMessages + datas.overall.numberOfMessages);
 		$('#messagesPerMinute').text(datas.now.messagesPerMinute ? datas.now.messagesPerMinute : 'Too slow!');
 		$('#averageSpeed').text(datas.overall.messagesPerMinute);

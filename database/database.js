@@ -15,6 +15,59 @@ let d = class Database
 		Database.firstTimeRun();
 	}
 
+	static retrieveGlobalStatsInInterval(fromDate, toDate, callback)
+	{
+		fromDate = new Date(fromDate);
+		toDate = new Date(toDate);
+
+		GlobalStatsOverTime.aggregate(
+		[
+			{
+				$match:
+				{
+					"from": { "$gt": fromDate },
+					"to": { "$lt": toDate },
+				}
+			},
+			{
+				
+				$group:
+				{
+					_id: 0,
+					numberOfMessages: { $sum: "$numberOfMessages" },
+					messagesPerMinute: { $avg: "$messagesPerMinute" },
+				}
+			}
+		], callback);
+	}
+
+	static retrieveChannelStatsInInterval(fromDate, toDate, channelName, callback)
+	{
+		fromDate = new Date(fromDate);
+		toDate = new Date(toDate);
+
+		ChannelStatsOverTime.aggregate(
+		[
+			{
+				$match:
+				{
+					"from": { "$gt": fromDate },
+					"to": { "$lt": toDate },
+                    "channelName": channelName
+				}
+			},
+			{
+				
+				$group:
+				{
+					_id: 0,
+					numberOfMessages: { $sum: "$numberOfMessages" },
+					messagesPerMinute: { $avg: "$messagesPerMinute" },
+				}
+			}
+		], callback);
+	}
+
 	static retrieveGlobalStats(callback)
 	{
 		GlobalStats.findOne({}, callback); // callback(err, doc)

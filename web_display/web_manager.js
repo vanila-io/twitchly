@@ -34,34 +34,13 @@ let s = function(statsManager)
 			let datas = statsManager.datas;
 
 			socket.emit('datas', datas);
-
 		});
 
 		socket.on('needChannelDatas', function(channelName)
 		{
 			let stats = statsManager.getChannelDatas(channelName);
 			
-			socket.emit('datas', stats);/*
-			
-			Database.retrieveChannelStats(channelName, function(err, doc)
-			{
-				if(err)
-					throw error;
-
-				if(!doc)
-					return;
-
-				let realtimeStat = statsManager.getChannelDatas(channelName);
-
-				let o = {};
-				o.numberOfMessages = doc.numberOfMessages + realtimeStat.numberOfMessages;
-				o.messagesPerMinute = realtimeStat.messagesPerMinute;
-				o.averageMessagePerMinute = doc.messagesPerMinute;
-				o.mostActiveSpeaker = realtimeStat.mostActiveSpeaker;
-				o.mostPopularWord = realtimeStat.mostPopularWord;
-
-				socket.emit('datas', o);
-			});*/
+			socket.emit('datas', stats);
 		});
 
 		socket.on('needMessage', function(data)
@@ -74,13 +53,30 @@ let s = function(statsManager)
 			statsManager.addChannel(channel);
 		});
 
-		socket.on('needChannelStat', function(name)
+		/* object = { fromDate, toDate, channelName } */
+		socket.on('retrieveChannelStatsInInterval', function(object)
 		{
-			Database.retrieveChannelStats(name, function(err, doc)
+			Database.retrieveChannelStatsInInterval(object.fromDate, object.toDate, object.channelName, function(err, res)
 			{
-				if(err) return;
+				if(err) throw err;
 
-				socket.emit('channelStat', doc);
+				if(res && res[0]) res = res[0];
+				else res = {};
+
+				res.fromDate = object.fromDate;
+				res.toDate = object.toDate;
+				socket.emit('channelStatsInInterval', res);
+			});
+		});
+
+		socket.on('retrieveGlobalStatsInInterval', function(object)
+		{
+			Database.retrieveGlobalStatsInInterval(object.fromDate, object.toDate, function(err, res)
+			{
+				res = res[0];
+				res.fromDate = object.fromDate;
+				res.toDate = object.toDate;
+				socket.emit('globalStatsInInterval', res);
 			});
 		});
 	});

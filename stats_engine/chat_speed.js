@@ -17,7 +17,7 @@ let c = class ChatSpeed
 			this.firstDate = new Date().getTime();
 		}
 
-		if(this.tick === 120)
+		if(this.tick === 5000) // this is an arbitrary number
 		{
 			this.oldSpeed = this.messagesByMinutes;
 			this.tick = 0;
