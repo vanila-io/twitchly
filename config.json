@@ -1,3 +1,8 @@
 {
-	"memory-timeout": "60000"
+	"memory-timeout": "60000",
+	"event-channels":
+	[
+	    "#esl_csgo",
+	    "#riotgames"
+	]
 }

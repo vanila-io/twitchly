@@ -8,10 +8,8 @@ let StatsManager = require('./stats_engine/stats_manager.js');
 let Database = require('./database/database.js');
 Database.connect();
 
-let s = new StatsManager("imote", "oauth:c5fktgkvn5nmhoos6115fbnmid3nqk", false, config['memory-timeout']);
+let s = new StatsManager("imote", "oauth:c5fktgkvn5nmhoos6115fbnmid3nqk", false, config);
 let WebServer = require('./web_display/web_manager.js')(s);
-
-
 
 s.on('connected', function()
 {
