@@ -8,9 +8,10 @@ let ChannelStatsDatabase = require('./../database/channel_stats.js');
 
 let c = class ChannelStats
 {
-	constructor(name)
+	constructor(stream)
 	{
-		this.name = name;
+		this.name = '#' + stream.channel.name;
+		this.stream = stream;
 		this.messageCount = 0;
 		this.wordStats = new WordStats();
 		this.speakerStats = new WordStats;
@@ -29,6 +30,14 @@ let c = class ChannelStats
 				self.overallStats.name = self.name;
 			}
 		});
+
+		Database.saveChannelMetadata(this.stream);
+	}
+
+	updateMetaDatas(stream)
+	{
+		this.stream = stream;
+		Database.saveChannelMetadata(this.stream);
 	}
 
 	onChat(user, message, self)
@@ -51,6 +60,12 @@ let c = class ChannelStats
 		o.now.messagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
 
 		o.overall = this.overallStats;
+
+		o.game = this.stream.game;
+		o.viewers = this.stream.viewers;
+		o.mature = this.stream.channel.mature;
+		o.views = this.stream.channel.views;
+		o.followers = this.stream.channel.followers;
 
 		return o;
 	}

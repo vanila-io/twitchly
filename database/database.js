@@ -5,6 +5,7 @@ let mongoose = require('mongoose');
 let GlobalStatsOverTime = require('./global_stats_over_time.js');
 let GlobalStats = require('./global_stats.js');
 let ChannelStatsOverTime = require('./channel_stats_over_time.js');
+let ChannelMetadataOverTime = require('./channel_metadata_over_time.js');
 let ChannelStats = require('./channel_stats.js');
 
 let d = class Database
@@ -105,18 +106,6 @@ let d = class Database
 
 			console.log('Saved!');
 		});
-
-		// Deplaced in stats_manager.js. To test then delete
-		/*GlobalStats.findOne({}, function(err, doc)
-		{
-			let f = datas.from / 1000;
-			let t = datas.to / 1000;
-
-			doc.numberOfMessages += datas.numberOfMessages;
-			doc.messagesPerMinute = Math.round(((doc.messagesPerMinute * doc.totalTime + (datas.messagesPerMinute * (t - f))) / (doc.totalTime + (t - f))));
-			doc.totalTime = doc.totalTime + (t - f);
-			doc.save(function(err){ if(err) throw err; console.log('Global saved!');});
-		});*/
 	}
 
 	static addChannelStats(datas)
@@ -137,6 +126,14 @@ let d = class Database
 
 				console.log('Saved!');
 		});
+	}
+
+	static saveChannelMetadata(data)
+	{
+		delete data['_id'];
+		data.date = new Date();
+
+		ChannelMetadataOverTime.collection.insert(data, function(err){if(err) throw err;});
 	}
 
 	static firstTimeRun()

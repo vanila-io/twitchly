@@ -36,6 +36,15 @@ let s = function(statsManager)
 			socket.emit('datas', datas);
 		});
 
+		socket.on('needHomepageDatas', function(data)
+		{
+			let d = {};
+			d.global = statsManager.globalStats;
+			d.channels = statsManager.topTenChannels;
+
+			socket.emit('homepageDatas', d);
+		});
+
 		socket.on('needChannelDatas', function(channelName)
 		{
 			let stats = statsManager.getChannelDatas(channelName);

@@ -1,20 +1,35 @@
 <%- include('header') -%>
 
+<script src="/chart.min.js"></script>
+
 <h1>#<%= channelName %> stats</h1>
 
 <p>Number of messages: <span id="numberOfMessages"></span></p>
 <p>Actual speed (message/minute): <span id="messagesPerMinute"></span></p>
 <p>Average speed: <span id="averageSpeed"></span></p>
 <p>Most active speaker: <span id="mostActiveSpeaker"></span></p>
-<p>Most popular word: <span id="mostPopularWord"></span></p>
+<p>Most popular word: <span id="mostPopularWord"></span></p><br />
+
+<p>Game: <span id="game"></span></p>
+<p>Viewers: <span id="viewers"></span></p>
+<p>Views: <span id="views"></span></p>
+<p>Followers: <span id="followers"></span></p>
+<p>Mature public: <span id="mature"></span></p>
 
 <p>From: <input type="datetime-local" id="from" name="from"></p>
 <p>To: <input type="datetime-local" id="to" name="to"></p>
 <p><button id="find">Find</button></p>
 <div id="intervalResult"></div>
 
+
+<canvas id="myChart" width="400" height="400"></canvas>
+
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
+
+	var ctx = $("#myChart").get(0).getContext("2d");
+	var myNewChart = new Chart(ctx);
 	
 	var fromDateInput = $('#from');
 	var toDateInput = $('#to');
@@ -23,7 +38,7 @@
 	toDateInput.setNow();
 
 
-	var socket = io.connect('https://twitter-imote.c9users.io/');
+	var socket = io.connect('http://localhost:8080');
 	
 	$('#find').on('click', function()
 	{
@@ -55,6 +70,11 @@
 		$('#averageSpeed').text(datas.overall.messagesPerMinute);
 		$('#mostActiveSpeaker').text(datas.now.mostActiveSpeaker);
 		$('#mostPopularWord').text(datas.now.mostPopularWord);
+		$('#game').text(datas.game);
+		$('#viewers').text(datas.viewers);
+		$('#views').text(datas.views);
+		$('#followers').text(datas.followers);
+		$('#mature').text(datas.mature ? 'Yes' : 'No');
 	});
 
 	setInterval(function()

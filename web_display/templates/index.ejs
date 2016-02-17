@@ -55,14 +55,14 @@
 
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
-		var socket = io.connect('https://twitter-imote.c9users.io/');
+		var socket = io.connect('http://localhost:8080');
 		var numberOfMessagesDisplayed = 10;
 		var timeBetweenNewMessage = 1000;
 		
 		var lastId = 0;
 		var lastMessage = '';
 
-		socket.on('datas', function (data)
+		socket.on('homepageDatas', function (data)
 		{
 	    	$('#nom').text(data.global.now['numberOfMessages']);
 	    	$('#nompm').text(data.global.now['messagesPerMinute']);
@@ -110,8 +110,8 @@
 
 	  	setInterval(function()
 	  	{
-	  		socket.emit('needDatas', {});
-	  	}, 100);
+	  		socket.emit('needHomepageDatas', {});
+	  	}, 300);
 
 	  	setInterval(function()
 	  	{

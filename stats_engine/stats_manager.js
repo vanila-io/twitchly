@@ -14,7 +14,6 @@ let s = class StatsManager extends EventEmitter
 	constructor(username, password, debug, config)
 	{
 		super();
-
 		this.ircOptions = {};
 		this.ircOptions.main = 
 		{
@@ -112,15 +111,24 @@ let s = class StatsManager extends EventEmitter
 		});
 	}
 	
-	addChannel(name)
+	addChannel(channel)
 	{
 		let self = this;
-		
+		let name = '#';
+		name += channel.channel.name;
+
+		if(this.channels[name])
+		{
+			this.channels[name].updateMetaDatas(channel);
+			return;
+		}
+
 		if(this.options['event-channels'].indexOf(name) !== -1)
 		{
 			this.eventClient.join(name);
 			
-			const c = new ChannelStats(name);
+			const c = new ChannelStats(channel);
+
 			this.channels[name] = c;
 			return;
 		}
@@ -130,20 +138,19 @@ let s = class StatsManager extends EventEmitter
 			this.mainClient[this.mainClient.length - 1].client.join(name);
 			this.mainClient[this.mainClient.length - 1].count += 1;
 			
-			const c = new ChannelStats(name);
+			const c = new ChannelStats(channel);
 			this.channels[name] = c;
 		}
 		else if(!this.mainClient[this.mainClient.length - 1].ready)
 		{
-			this.waitingChannels.push(name);
+			this.waitingChannels.push(channel);
 		}
 		else
 		{
 			this.mainClient.push( { count: 0, ready: false, client: new irc.client(this.ircOptions.main) } );
 		
-			let i = this.mainClient.length - 1;
 			console.log('there is now ' + this.mainClient.length + ' clients.');
-			
+			let i = this.mainClient.length - 1;
 			
 			this.mainClient[i].client.connect().then(function(data)
 			{
@@ -153,16 +160,53 @@ let s = class StatsManager extends EventEmitter
 				
 				self.mainClient[i].client.on('chat', function(a, b, c, d) { self.onChat(a, b, c, d); } );
 				
-				const c = new ChannelStats(name);
+				const c = new ChannelStats(channel);
 				self.channels[name] = c;
 				
-				for(let channel of self.waitingChannels)
+				let x = self.waitingChannels;
+				self.waitingChannels = [];
+
+				while(x.length > 0)
 				{
-					self.addChannel(channel);
-					self.waitingChannels.splice(0, 1);
+					self.addChannel(x.pop());
 				}
 			});
 		}
+	}
+
+	get globalStats()
+	{
+		const o = {};
+		o.now = {};
+
+		o.now.numberOfMessages = this.messageCount;
+		o.now.mostPopularWord = this.wordStats.mostPopular;
+		o.now.mostActiveSpeaker = this.speakerStats.mostPopular;
+		o.now.messagesPerMinute = Math.round(this.chatSpeed.messagesByMinutes);
+
+		o.overall = this.overallStats;
+
+		return o;
+	}
+
+	get topTenChannels()
+	{
+		let o = {};
+		let count = 0;
+
+		for (let channel in this.channels)
+		{
+		    if(!this.channels.hasOwnProperty(channel)) continue;
+		    
+		    o[channel] = this.channels[channel].datas;
+
+		    count += 1;
+
+		    if(count === 10)
+		    	break;
+		}
+
+		return o;
 	}
 
 	get datas()
@@ -203,7 +247,7 @@ let s = class StatsManager extends EventEmitter
 	onChat(channel, user, message, self)
 	{
 		this.messageCount += 1;
-		console.log('Number of messages: ' + this.messageCount);
+		//console.log('Number of messages: ' + this.messageCount);
 
 		if(this.channels[channel])
 		{
