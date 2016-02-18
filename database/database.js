@@ -7,6 +7,7 @@ let GlobalStats = require('./global_stats.js');
 let ChannelStatsOverTime = require('./channel_stats_over_time.js');
 let ChannelMetadataOverTime = require('./channel_metadata_over_time.js');
 let ChannelStats = require('./channel_stats.js');
+let GameList = require('./game_list.js');
 
 let d = class Database
 {
@@ -14,6 +15,18 @@ let d = class Database
 	{
 		mongoose.connect('mongodb://localhost/twitch');
 		Database.firstTimeRun();
+		
+		GameList.find({}, function(err, docs)
+		{
+			if(err) throw err;
+			Database.gameList = docs;
+			console.log(docs);
+		});
+	}
+	
+	static insertNewGame()
+	{
+			
 	}
 
 	static retrieveGlobalStatsInInterval(fromDate, toDate, callback)
@@ -152,6 +165,10 @@ let d = class Database
 				let globalStat = new GlobalStats();
 				globalStat.save(function(err){ if(err) throw err; console.log('Database populated!'); });
 			}
+			
+			let gl = new GameList;
+			gl.name = "Minecraft";
+			gl.save(function(){});
 		});
 	}
 }
