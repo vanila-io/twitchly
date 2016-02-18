@@ -54,6 +54,7 @@
 
 	socket.on('channelStatsInInterval', function(result)
 	{
+		console.log(result);
 		var div = $('#intervalResult');
 		div.text('');
 		div.append('<h4>Stats between ' + result.fromDate + ' to ' + result.toDate + '</h4>');

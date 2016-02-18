@@ -93,6 +93,55 @@ let s = function(statsManager)
 			});
 		});
 
+
+		/* object = { fromDate, toDate, step, channelName } */
+		socket.on('retrieveChannelStatsInMultipleInterval', function(object)
+		{
+			let dates = [];
+
+			let fromDate = new Date(object.fromDate);
+			let toDate = new Date(object.toDate);
+			let time = toDate.getTime() - fromDate.getTime();
+			let stepTime = time / object.step;
+
+			for(let i = 0; i <= object.step - 1; ++i)
+			{
+				let o = {};
+				o.from = new Date(fromDate.getTime() + stepTime * i);
+				o.to = new Date(fromDate.getTime() + stepTime * (i + 1));
+				dates.push(o);
+			}
+
+			let i = 0;
+			
+			let result = [];
+	
+			let channelsStatsInMultipleIntervalCallback = function(err, res)
+			{
+					if(err) throw err;
+
+					if(res && res[0]) res = res[0];
+					else res = {};
+
+					res.fromDate = dates[i].from;
+					res.toDate = dates[i].to;
+
+					result.push(res);
+
+					if(i !== object.step - 1)
+					{
+						++i;
+						Database.retrieveChannelStatsInInterval(dates[i].from, dates[i].to, object.channelName, channelsStatsInMultipleIntervalCallback);
+						return;
+					}
+
+					socket.emit('channelStatsInMultipleInterval', result);
+					console.log(result);
+			}
+
+			Database.retrieveChannelStatsInInterval(dates[0].from, dates[0].to, object.channelName, channelsStatsInMultipleIntervalCallback);
+		});
+
 		socket.on('retrieveGlobalStatsInInterval', function(object)
 		{
 			Database.retrieveGlobalStatsInInterval(object.fromDate, object.toDate, function(err, res)

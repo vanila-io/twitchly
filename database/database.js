@@ -48,8 +48,8 @@ let d = class Database
 			{
 				$match:
 				{
-					"from": { "$gt": fromDate },
-					"to": { "$lt": toDate },
+					"from": { "$gte": new Date(fromDate.toISOString()) },
+					"to": { "$lte": new Date(toDate.toISOString()) },
 				}
 			},
 			{
@@ -74,8 +74,8 @@ let d = class Database
 			{
 				$match:
 				{
-					"from": { "$gt": fromDate },
-					"to": { "$lt": toDate },
+					"from": { "$gte": new Date(fromDate.toISOString()) },
+					"to": { "$lte": new Date(toDate.toISOString()) },
                     "channelName": channelName
 				}
 			},
