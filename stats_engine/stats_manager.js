@@ -256,8 +256,13 @@ let s = class StatsManager extends EventEmitter
 
 		for(let channel of channelSorted)
 		{
-		    let channelGame = this.channels[channel].stream.game.toLowerCase().replace(/\s+/g, '').replace('&', '').replace("'", '').replace(':', '');
-
+		    let channelGame = '';
+		
+		    if(this.channels[channel].stream.game)
+		        channelGame = this.channels[channel].stream.game.toLowerCase().replace(/\s+/g, '').replace('&', '').replace("'", '').replace(':', '');
+		    else
+		    	channelGame = 'No Game';
+		    	
 		    if(channelGame == gameName)
 		    	o.push(this.channels[channel].datas);
 		}
