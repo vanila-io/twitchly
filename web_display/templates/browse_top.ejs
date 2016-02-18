@@ -1,0 +1,7 @@
+<%- include('header') -%>
+
+<% Object.keys(channelList).forEach(function(channel) { %>
+
+  <p> <a href="/<%= channelList[channel].name.substring(1) %>"> <%= channelList[channel].name %> </a></p>
+
+<% }); %>

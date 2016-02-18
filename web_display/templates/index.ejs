@@ -33,9 +33,13 @@
 		</div>
 	</div>
 
+	<p><a href="/browse/games">Browse by games</a></p>
+	<p><a href="/browse/top">Browse by Top 30</a></p>
+
 	<h1>Global stats (realtime)</h1>
 	<p>Number of messages: <span id="nom"></span></p>
 	<p>Number of messages per minutes: <span id="nompm"></span></p>
+	<p>Number of messages per seconds: <span id="nomps"></span></p>
 	<p>Most active speaker: <span id="map"></span></p>
 
 	<h1>Ten last messages</h1>
@@ -66,6 +70,7 @@
 		{
 	    	$('#nom').text(data.global.now['numberOfMessages']);
 	    	$('#nompm').text(data.global.now['messagesPerMinute']);
+	    	$('#nomps').text(Math.round(data.global.now['messagesPerMinute'] / 60));
 	    	$('#mpw').text(data.global.now['mostPopularWord']);
 	    	$('#map').text(data.global.now['mostActiveSpeaker']);
 

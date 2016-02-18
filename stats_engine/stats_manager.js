@@ -189,21 +189,23 @@ let s = class StatsManager extends EventEmitter
 		return o;
 	}
 
-	get topTenChannels()
+	topChannels(limit)
 	{
+		let self = this;
+
 		let o = {};
 		let count = 0;
 
-		for (let channel in this.channels)
+		let channelSorted = Object.keys(this.channels).sort(function(a, b) { return self.channels[b].messageCount - self.channels[a].messageCount });
+
+		for(let channel of channelSorted)
 		{
-		    if(!this.channels.hasOwnProperty(channel)) continue;
-		    
-		    o[channel] = this.channels[channel].datas;
+			o[channel] = this.channels[channel].datas;
 
-		    count += 1;
+			count += 1;
 
-		    if(count === 10)
-		    	break;
+			if(count === limit)
+				break;
 		}
 
 		return o;
@@ -242,6 +244,25 @@ let s = class StatsManager extends EventEmitter
 	get lastMessage()
 	{
 		return this.message;
+	}
+
+	getChannelsByGame(gameName)
+	{
+		let self = this;
+
+		let o = [];
+
+		let channelSorted = Object.keys(this.channels).sort(function(a, b) { return self.channels[b].messageCount - self.channels[a].messageCount });
+
+		for(let channel of channelSorted)
+		{
+		    let channelGame = this.channels[channel].stream.game.toLowerCase().replace(/\s+/g, '').replace('&', '').replace("'", '').replace(':', '');
+
+		    if(channelGame == gameName)
+		    	o.push(this.channels[channel].datas);
+		}
+
+		return o;
 	}
 
 	onChat(channel, user, message, self)

@@ -1,0 +1,7 @@
+<%- include('header') -%>
+
+<% gameList.forEach(function(game) { %>
+
+	<p> <a href="/game/<%= game.nameId %>"> <%= game.name %> </a></p>
+
+<% }); %>

@@ -21,6 +21,21 @@ let s = function(statsManager)
 		res.render('index', {});
 	});
 
+	app.get('/browse/games', function(req, res)
+	{
+		res.render('browse_game', { gameList: Database.gameList });
+	});
+
+	app.get('/browse/top', function(req, res)
+	{
+		res.render('browse_top', { channelList: statsManager.topChannels(30) } );
+	})
+
+	app.get('/game/:gameName', function(req, res)
+	{
+		res.render('game', { channelList: statsManager.getChannelsByGame(req.params.gameName) } );
+	});
+
 	app.get('/:channelName', function(req, res)
 	{
 		console.log(req.params);
@@ -40,7 +55,7 @@ let s = function(statsManager)
 		{
 			let d = {};
 			d.global = statsManager.globalStats;
-			d.channels = statsManager.topTenChannels;
+			d.channels = statsManager.topChannels(10);
 
 			socket.emit('homepageDatas', d);
 		});

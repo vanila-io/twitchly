@@ -20,13 +20,22 @@ let d = class Database
 		{
 			if(err) throw err;
 			Database.gameList = docs;
-			console.log(docs);
 		});
 	}
 	
-	static insertNewGame()
+	static insertNewGame(gameName)
 	{
-			
+		for(let game of Database.gameList)
+		{
+			if(game.name === gameName)
+				return;
+		}
+
+		let newGame = new GameList;
+		newGame.name = gameName;
+		newGame.nameId = gameName ? gameName.toLowerCase().replace(/\s+/g, '').replace('&', '').replace("'", '').replace(':', '') : 'No Game'; //lower case & no spaces & no special char
+		newGame.save(function(){});
+		Database.gameList.push(newGame);
 	}
 
 	static retrieveGlobalStatsInInterval(fromDate, toDate, callback)
@@ -147,6 +156,8 @@ let d = class Database
 		data.date = new Date();
 
 		ChannelMetadataOverTime.collection.insert(data, function(err){if(err) throw err;});
+
+		Database.insertNewGame(data.game);
 	}
 
 	static firstTimeRun()
@@ -165,10 +176,6 @@ let d = class Database
 				let globalStat = new GlobalStats();
 				globalStat.save(function(err){ if(err) throw err; console.log('Database populated!'); });
 			}
-			
-			let gl = new GameList;
-			gl.name = "Minecraft";
-			gl.save(function(){});
 		});
 	}
 }

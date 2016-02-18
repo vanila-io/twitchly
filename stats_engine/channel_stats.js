@@ -17,6 +17,9 @@ let c = class ChannelStats
 		this.speakerStats = new WordStats;
 		this.chatSpeed = new ChatSpeed();
 
+		if(!this.stream.game)
+			this.stream.game = 'No game';
+
 		let self = this;
 
 		Database.retrieveChannelStats(this.name, function(err, doc)
@@ -66,6 +69,7 @@ let c = class ChannelStats
 		o.mature = this.stream.channel.mature;
 		o.views = this.stream.channel.views;
 		o.followers = this.stream.channel.followers;
+		o.name = this.name;
 
 		return o;
 	}

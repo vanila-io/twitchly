@@ -1,0 +1,7 @@
+<%- include('header') -%>
+
+<% channelList.forEach(function(channel) { %>
+
+	<p> <a href="/<%= channel.name.substring(1) %>"> <%= channel.name %> </a></p>
+
+<% }); %>
