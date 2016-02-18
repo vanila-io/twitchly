@@ -89,12 +89,15 @@ let c = class ChannelStats
 
 		let f = o.from / 1000;
 		let t = o.to / 1000;
-
+		
+		if(this.overallStats)
+		{
 		this.overallStats.numberOfMessages += o.numberOfMessages;
 		this.overallStats.messagesPerMinute = Math.round(((this.overallStats.messagesPerMinute * this.overallStats.totalTime + (o.messagesPerMinute * (t - f))) / (this.overallStats.totalTime + (t - f))));
 		this.overallStats.totalTime = this.overallStats.totalTime + (t - f);
 		this.overallStats.save(function(err){ if(err) throw err;});
-
+		}
+		
 		this.reset();
 	}
 
