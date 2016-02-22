@@ -1,69 +1,34 @@
 "use strict";
 
+require('./utilities.js');
+
 const config = require('./config.json');
-const https = require('https');
-
+const TwitchAPI = require('./twitch/twitch_api.js');
 let StatsManager = require('./stats_engine/stats_manager.js');
-
 let Database = require('./database/database.js');
+
 Database.connect();
-
-let s = new StatsManager("imote", "oauth:c5fktgkvn5nmhoos6115fbnmid3nqk", false, config);
+let s = new StatsManager(config.twitch.username, config.twitch['oauth-password'], false, config);
 let WebServer = require('./web_display/web_manager.js')(s);
-
-function minuteToMillisecond(minute)
-{
-	return minute * 60 * 1000;
-}
 
 function start()
 {
-	setInterval(function()
+	(function _start()
 	{
-		let response = '';
-
-		https.get('https://api.twitch.tv/kraken/streams?limit=100', (res) =>
+		TwitchAPI.getStreamList(100, (err, res) =>
 		{
-			res.on('data', (d) => response += d);
-			res.on('end', () => 
-			{
-				response = JSON.parse(response);
+			if(err) return;
+			
+			if(!res.streams) return;
+			
+			for(let stream of res.streams)
+				s.addChannel(stream);
 				
-				for (let stream of response.streams)
-				{
-					s.addChannel(stream);
-				}
-
-				console.log('SAAAAAAVED');
-			});
-		});	
-
-	}, minuteToMillisecond(5));
+			console.log('New stream list.');
+		});
+		
+		setTimeout(_start, minuteToMilliseconds(5));
+	})();
 }
 
-s.on('connected', function()
-{
-	let response = '';
-	let n = 0;
-	
-	https.get('https://api.twitch.tv/kraken/streams?limit=100', (res) =>
-	{
-		res.on('data', (d) => response += d);
-		res.on('end', () => 
-		{
-			response = JSON.parse(response);
-			console.log(response.streams.length);
-			for (let stream of response.streams)
-			{
-				s.addChannel(stream);
-				n += 1;
-			}
-
-			start();
-			
-			console.log(n + ' channel added');
-		});
-	});
-});
-
-s.connect();
+start();

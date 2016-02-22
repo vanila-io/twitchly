@@ -18,8 +18,8 @@
 	},
 	"twitch":
 	{
-		"username": "imote",
-		"oauth-password": "oauth:c5fktgkvn5nmhoos6115fbnmid3nqk"
+		"username": "",
+		"oauth-password": ""
 	},
 	"debug-mode": false
 }

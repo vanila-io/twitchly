@@ -1,7 +1,6 @@
 "use strict";
 
-const EventEmitter = require('events');
-let irc = require("tmi.js");
+let IRCManager = require('./../twitch/irc_manager.js');
 
 let ChannelStats = require('./channel_stats.js');
 let WordStats = require('./word_stats.js');
@@ -9,66 +8,28 @@ let ChatSpeed = require('./chat_speed.js');
 
 let Database = require('./../database/database.js');
 
-let s = class StatsManager extends EventEmitter
+let s = class StatsManager
 {
 	constructor(username, password, debug, config)
 	{
-		super();
-		this.ircOptions = {};
-		this.ircOptions.main = 
-		{
-			options:
-			{
-				debug: debug,
-			},
-			connection:
-			{
-				cluster: "main",
-				reconnect: true,
-			},
-			identity:
-			{
-				username: username,
-				password: password,
-			},
-		};
-		
-		this.ircOptions.event = 
-		{
-			options:
-			{
-				debug: debug,
-			},
-			connection:
-			{
-				cluster: "event",
-				reconnect: true,
-			},
-			identity:
-			{
-				username: username,
-				password: password,
-			},
-		};
-
-		this.mainClient = [];
-		this.mainClient.push( { count: 0, ready: false, client: new irc.client(this.ircOptions.main) } );
-		this.eventClient = new irc.client(this.ircOptions.event);
-		
 		let self = this;
-		this.mainClient[0].client.on('chat', function(a, b, c, d) { self.onChat(a, b, c, d); } );
-		this.eventClient.on('chat', function(a, b, c, d) { self.onChat(a, b, c, d); } );
+		
+		this.clientManager = new IRCManager(config);
+		this.clientManager.on('newClient', (client) =>
+		{
+			console.log('new client');
+			client.on('chat', (a, b, c, d) => { self.onChat(a, b, c, d); } );	
+		});
 
 		this.channels = {};
-		this.waitingChannels = [];
+		
 		this.messageCount = 0;
-
 		this.wordStats = new WordStats;
 		this.speakerStats = new WordStats;
 		this.chatSpeed = new ChatSpeed;
 
 		this.options = config;
-		this.memoryTimeout = config['memory-timeout'] ? config['memory-timeout'] : 60000; // 60 seconds, 1 minutes (in millis)
+		this.memoryTimeout = config['stats-engine']['memory-timeout'] ? config['stats-engine']['memory-timeout'] : 60000; // 60 seconds, 1 minutes (in millis)
 
 		this.message = {};
 		this.message.date = -1;
@@ -87,91 +48,12 @@ let s = class StatsManager extends EventEmitter
 		}, this.memoryTimeout);
 	}
 	
-	connect()
-	{
-		const self = this;
-
-		this.mainClient[0].client.connect().then(function(data)
-		{
-			console.log('First client connected.');
-			self.mainClient[0].ready = true;
-			
-			self.eventClient.connect().then(function(data2)
-			{
-				console.log('Event client connected.');
-				self.emit('connected');
-			}).catch(function(err)
-			{
-				console.log('Can not connect to Twitch event IRC. ' + err);
-			});
-			
-		}).catch(function(err)
-		{
-			console.log('Can not connect to Twitch main IRC. ' + err);
-		});
-	}
-	
 	addChannel(channel)
 	{
-		let self = this;
-		let name = '#';
-		name += channel.channel.name;
-
-		if(this.channels[name])
-		{
-			this.channels[name].updateMetaDatas(channel);
-			return;
-		}
-
-		if(this.options['event-channels'].indexOf(name) !== -1)
-		{
-			this.eventClient.join(name);
-			
-			const c = new ChannelStats(channel);
-
-			this.channels[name] = c;
-			return;
-		}
+		let name = '#' + channel.channel.name;
 		
-		if(this.mainClient[this.mainClient.length - 1].count < 46 && this.mainClient[this.mainClient.length - 1].ready)
-		{
-			this.mainClient[this.mainClient.length - 1].client.join(name);
-			this.mainClient[this.mainClient.length - 1].count += 1;
-			
-			const c = new ChannelStats(channel);
-			this.channels[name] = c;
-		}
-		else if(!this.mainClient[this.mainClient.length - 1].ready)
-		{
-			this.waitingChannels.push(channel);
-		}
-		else
-		{
-			this.mainClient.push( { count: 0, ready: false, client: new irc.client(this.ircOptions.main) } );
-		
-			console.log('there is now ' + this.mainClient.length + ' clients.');
-			let i = this.mainClient.length - 1;
-			
-			this.mainClient[i].client.connect().then(function(data)
-			{
-				self.mainClient[i].client.join(name);
-				self.mainClient[i].count += 1;
-				self.mainClient[i].ready = true;
-				
-				self.mainClient[i].client.on('chat', function(a, b, c, d) { self.onChat(a, b, c, d); } );
-				
-				const c = new ChannelStats(channel);
-				self.channels[name] = c;
-				
-				let x = self.waitingChannels;
-				self.waitingChannels = [];
-
-				while(x.length > 0)
-				{
-					self.addChannel(x.pop());
-				}
-			});
-		}
+		this.clientManager.addChannel(name);
+		this.channels[name] = new ChannelStats(channel);
 	}
 
 	get globalStats()
@@ -273,7 +155,6 @@ let s = class StatsManager extends EventEmitter
 	onChat(channel, user, message, self)
 	{
 		this.messageCount += 1;
-		//console.log('Number of messages: ' + this.messageCount);
 
 		if(this.channels[channel])
 		{
