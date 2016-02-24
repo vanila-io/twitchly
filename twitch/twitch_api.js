@@ -2,7 +2,7 @@
 
 const https = require('https');
 
-let x = class TwitchAPI
+class TwitchAPI
 {
     static getStreamList(limit, callback)
     {
@@ -28,4 +28,4 @@ let x = class TwitchAPI
     }
 };
 
-module.exports = x;
+module.exports = TwitchAPI;

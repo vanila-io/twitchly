@@ -1,3 +1,8 @@
 'use strict';
 
-global.minuteToMilliseconds = (x) => x * 60000;
+function minuteToMilliseconds(x)
+{
+    return x * 60000;
+}
+
+module.exports = { minuteToMilliseconds };

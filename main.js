@@ -1,6 +1,6 @@
 "use strict";
 
-require('./utilities.js');
+const utilities = require('./utilities.js');
 
 const config = require('./config.json');
 const TwitchAPI = require('./twitch/twitch_api.js');
@@ -27,7 +27,7 @@ function start()
 			console.log('New stream list.');
 		});
 		
-		setTimeout(_start, minuteToMilliseconds(5));
+		setTimeout(_start, utilities.minuteToMilliseconds(5));
 	})();
 }
 

@@ -125,8 +125,6 @@ let d = class Database
 		{
 			if(err)
 				console.log(err);
-
-			console.log('Saved!');
 		});
 	}
 
@@ -145,8 +143,6 @@ let d = class Database
 		{
 			if(err)
 				return console.log(err);
-
-				console.log('Saved!');
 		});
 	}
 
