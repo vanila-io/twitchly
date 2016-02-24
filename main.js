@@ -3,11 +3,13 @@
 const utilities = require('./utilities.js');
 
 const config = require('./config.json');
+
 const TwitchAPI = require('./twitch/twitch_api.js');
 let StatsManager = require('./stats_engine/stats_manager.js');
-let Database = require('./database/database.js');
 
+let Database = require('./database/database.js');
 Database.connect();
+
 let s = new StatsManager(config.twitch.username, config.twitch['oauth-password'], false, config);
 let WebServer = require('./web_display/web_manager.js')(s);
 
