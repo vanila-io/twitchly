@@ -1,10 +1,15 @@
-let Database = require('./../../database/database.js');
+'use strict';
 
-class Controller
+let DatabaseUser = require('./database_user.js');
+
+/* This class define a generic way of defining controllers (same as C in MVC).
+ * It's useless, yeah, but in case of.
+ */
+class Controller extends DatabaseUser
 {
     constructor()
     {
-        this.database = Database;
+        super();
     }
 }
 
