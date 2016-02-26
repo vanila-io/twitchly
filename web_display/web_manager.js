@@ -25,7 +25,7 @@ class WebManager extends WebController
 		this.ExpressApp.set('views', __dirname + '/templates');
 		this.ExpressApp.use(express.static(__dirname + '/public'));
 	
-		server.listen(8080);
+		server.listen(this.config['web-engine']['serve-port']);
 		
 		this.ExpressApp.get('/', this['index'].bind(this));
 		this.ExpressApp.get('/browse/games', this['browse_games'].bind(this));
