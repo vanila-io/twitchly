@@ -38,7 +38,7 @@
 	toDateInput.setNow();
 
 
-	var socket = io.connect('http://localhost:8080');
+	var socket = io.connect('<%= env.url %>');
 	
 	$('#find').on('click', function()
 	{

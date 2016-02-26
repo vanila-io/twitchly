@@ -11,7 +11,8 @@ let Database = require('./database/database.js');
 Database.connect();
 
 let s = new StatsManager(config.twitch.username, config.twitch['oauth-password'], false, config);
-let WebServer = require('./web_display/web_manager.js')(s);
+let WebManager = require('./web_display/web_manager.js');
+let web = new WebManager(s, config);
 
 function start()
 {

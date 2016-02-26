@@ -59,7 +59,7 @@
 
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
-		var socket = io.connect('https://twitter-imote.c9users.io');
+		var socket = io.connect('<%= env.url %>');
 		var numberOfMessagesDisplayed = 10;
 		var timeBetweenNewMessage = 1000;
 		
