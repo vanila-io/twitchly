@@ -52,6 +52,9 @@ let s = class StatsManager
 	{
 		let name = '#' + channel.channel.name;
 		
+		if(this.channels[name])
+			return;
+		
 		this.clientManager.addChannel(name);
 		this.channels[name] = new ChannelStats(channel);
 	}
