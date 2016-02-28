@@ -27,7 +27,29 @@ function start()
 			for(let stream of res.streams)
 				s.addChannel(stream);
 				
-			console.log('New stream list.');
+			console.log('New TOP stream list.');
+		});
+		
+		TwitchAPI.getTopGames(100, (err, res) =>
+		{
+			if(err) return;
+			
+			if(!res.top || res.top.length === 0) return;
+			
+			for(let game of res.top)
+			{
+				TwitchAPI.getTopStreamsByGame(encodeURI(game.game.name), 100, (err, res) =>
+				{
+					if(err) return;
+					
+					if(!res.streams) return;
+					
+					for(let stream of res.streams)
+						s.addChannel(stream);
+						
+					console.log('New Game Stream list');
+				});
+			}
 		});
 		
 		setTimeout(_start, utilities.minuteToMilliseconds(5));
