@@ -81,7 +81,7 @@ class IRCManager extends EventEmitter
 		
 		let lastIndex = clientsArray.length - 1;
 		
-		if(clientsArray[lastIndex] && clientsArray[clientsArray.length - 1].count < 46 && clientsArray[clientsArray.length - 1].ready)
+		if(clientsArray[lastIndex] && clientsArray[clientsArray.length - 1].count < 11 && clientsArray[clientsArray.length - 1].ready)
 		{
 			clientsArray[clientsArray.length - 1].client.join(channel);
 			clientsArray[clientsArray.length - 1].count += 1;

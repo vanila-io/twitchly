@@ -18,7 +18,12 @@ let s = class StatsManager
 		this.clientManager.on('newClient', (client) =>
 		{
 			console.log('new client');
-			client.on('chat', (a, b, c, d) => { self.onChat(a, b, c, d); } );	
+			client.on('chat', (a, b, c, d) => { self.onChat(a, b, c, d); } );
+			client.on('disconnected', function()
+			{
+				console.log('disconnected');
+				client.connect().then(function(){console.log('reconnected')})
+			})
 		});
 
 		this.channels = {};
@@ -33,6 +38,8 @@ let s = class StatsManager
 
 		this.message = {};
 		this.message.date = -1;
+		
+		this.channelNumber = 0;
 
 		Database.retrieveGlobalStats(function(err, doc)
 		{
@@ -57,6 +64,8 @@ let s = class StatsManager
 		
 		this.clientManager.addChannel(name);
 		this.channels[name] = new ChannelStats(channel);
+		this.channelNumber += 1;
+		console.log('We have ' + this.channelNumber + ' channels.');
 	}
 
 	get globalStats()

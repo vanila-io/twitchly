@@ -30,7 +30,7 @@ function start()
 			console.log('New TOP stream list.');
 		});*/
 		
-		TwitchAPI.getTopGames(100, (err, res) =>
+		TwitchAPI.getTopGames(99, (err, res) =>
 		{
 			if(err) return;
 			
@@ -38,7 +38,7 @@ function start()
 			
 			for(let game of res.top)
 			{
-				TwitchAPI.getTopStreamsByGame(encodeURI(game.game.name), 100, (err, res) =>
+				TwitchAPI.getTopStreamsByGame(encodeURI(game.game.name), 30, (err, res) =>
 				{
 					if(err) return;
 					
@@ -46,10 +46,10 @@ function start()
 					
 					for(let stream of res.streams)
 						s.addChannel(stream);
-						
-					console.log('New Game Stream list');
 				});
 			}
+			
+			console.log('Channels got from Twitch')
 		});
 		
 		setTimeout(_start, utilities.minuteToMilliseconds(5));
