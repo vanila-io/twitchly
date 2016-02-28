@@ -18,7 +18,7 @@ function start()
 {
 	(function _start()
 	{
-		TwitchAPI.getStreamList(100, (err, res) =>
+		/*TwitchAPI.getStreamList(100, (err, res) =>
 		{
 			if(err) return;
 			
@@ -28,7 +28,7 @@ function start()
 				s.addChannel(stream);
 				
 			console.log('New TOP stream list.');
-		});
+		});*/
 		
 		TwitchAPI.getTopGames(100, (err, res) =>
 		{
