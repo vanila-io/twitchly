@@ -30,7 +30,7 @@ function start()
 			console.log('New TOP stream list.');
 		});*/
 		
-		TwitchAPI.getTopGames(99, (err, res) =>
+		TwitchAPI.getTopGames(100, (err, res) =>
 		{
 			if(err) return;
 			
@@ -38,7 +38,7 @@ function start()
 			
 			for(let game of res.top)
 			{
-				TwitchAPI.getTopStreamsByGame(encodeURI(game.game.name), 30, (err, res) =>
+				TwitchAPI.getTopStreamsByGame(encodeURI(game.game.name), 40, (err, res) =>
 				{
 					if(err) return;
 					
