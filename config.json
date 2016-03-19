@@ -1,0 +1,25 @@
+{
+	"stats-engine":
+	{
+		"memory-timeout": "60000",
+		"event-channels":
+		[
+		    "#esl_csgo",
+		    "#riotgames",
+		    "#garenatw",
+		    "#riotgames2"
+		]
+	},
+	"web-engine":
+	{
+		"serve-port": 8080,
+		"url": "https://twitter-imote.c9users.io",
+		"socketio-port": 80
+	},
+	"twitch":
+	{
+		"username": "jelene",
+		"oauth-password": ""
+	},
+	"debug-mode": false
+}
