@@ -1,0 +1,134 @@
+<%- include('header') -%>
+
+<div class="siteWrapper">
+	<div class="header">
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+		    <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+		        <i class="fa fa-bars"></i>
+		      </button>
+		      <a class="navbar-brand" href="#"><img src="img/logo.png" alt=""></a>
+		    </div>
+
+		    <!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      <ul class="nav navbar-nav navbar-right">
+		        <li><a href="#">Stats</a></li>
+		        <li><a href="#">About</a></li>
+		        <li><a href="#">Who</a></li>
+		      </ul>
+		    </div><!-- /.navbar-collapse -->
+		  </div><!-- /.container-fluid -->
+		</nav>
+		<div class="headerCont">
+		<div class="headerCont-inner">
+
+			<p>Total <span class="textBg">messages </span><span class="glNumber" id="nom2"></span> started counting on <span class="date">14.Feb.2016</span></p>
+			<p>Average Twitch <span class="textBg">speed</span> is <span class="glSpeed" id="nompm2"></span> m/m</p>
+			<p>Most typed <span class="textBg">word</span> is <span class="word" id="mpw"></span></p>
+			<img src="img/graphic.png" alt="">
+		</div>
+		</div>
+	</div>
+
+	<p><a href="/browse/games">Browse by games</a></p>
+	<p><a href="/browse/top">Browse by Top 30</a></p>
+
+	<h1>Global stats (realtime)</h1>
+	<p>Number of messages: <span id="nom"></span></p>
+	<p>Number of messages per minutes: <span id="nompm"></span></p>
+	<p>Number of messages per seconds: <span id="nomps"></span></p>
+	<p>Most active speaker: <span id="map"></span></p>
+
+	<h1>Ten last messages</h1>
+	<div id="lastMessages"></div>
+
+	<h1>Channels stats</h1>
+
+	<!-- <p>Add a channel (need to begin with #): <input type="text" placeholder="#imote" id="channelName" /> <button type="button" id="addChannelButton">Add</button> </p> -->
+
+	<div id="channels">
+	</div>
+</div>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		var socket = io.
+connect('<%= env.url %>');
+		var numberOfMessagesDisplayed = 10;
+		var timeBetweenNewMessage = 1000;
+		
+		var lastId = 0;
+		var lastMessage = '';
+
+		socket.on('homepageDatas', function (data)
+		{
+	    	$('#nom').text(data.global.now['numberOfMessages']);
+	    	$('#nompm').text(data.global.now['messagesPerMinute']);
+	    	$('#nomps').text(Math.round(data.global.now['messagesPerMinute'] / 60));
+	    	$('#mpw').text(data.global.now['mostPopularWord']);
+	    	$('#map').text(data.global.now['mostActiveSpeaker']);
+
+	    	$('#nom2').text(data.global.overall['numberOfMessages'] + data.global.now['numberOfMessages']);
+	    	$('#nompm2').text(data.global.overall['messagesPerMinute']);
+
+	    	var channels = $('#channels');
+	    	channels.text('');
+
+	    	for (var channel in data.channels)
+			{
+			    if(!data.channels.hasOwnProperty(channel)) continue;
+			    
+			    channels.append('<h2><a href="/' + channel.substr(1) + '">' + channel + '</a></h2>');
+			    channels.append('<p>Number of messages: ' + data.channels[channel].now.numberOfMessages + '</p>');
+				channels.append('<p>Number of messages per minutes: ' + data.channels[channel].now.messagesPerMinute + '</p>');
+				channels.append('<p>Most popular word: ' + data.channels[channel].now.mostPopularWord + '</p>');
+				channels.append('<p>Most active speaker: ' + data.channels[channel].now.mostActiveSpeaker+ '</p>');
+				channels.append('<p>Total number of messages: ' + data.channels[channel].overall.numberOfMessages + '</p>');
+				channels.append('<p>Average speed (since ever): ' + data.channels[channel].overall.messagesPerMinute + '</p>');
+			}
+	  	});
+
+	  	socket.on('message', function(message)
+	  	{
+	  		if(lastMessage == message.message)
+	  			return;
+
+	  		lastMessage = message.message;
+	  		lastId += 1;
+	  		var div = $('#lastMessages');
+	  		var string = '<div id="message-' + lastId + '">';
+	  		string += '<' + message.channel + '> ';
+	  		if(!message.user['display-name'] || message.user['display-name'] == null || message.user['display-name'] === 'null')
+	  			string += '<strong>' + message.user['username']  + '</strong>: ';	
+	  		else
+	  			string += '<strong>' + message.user['display-name']  + '</strong>: ';
+	  		string += message.message + '<br /></div>';
+	  		div.html(string + div.html());
+	  		$('#message-' + (lastId - numberOfMessagesDisplayed)).remove();
+	  	})
+
+	  	setInterval(function()
+	  	{
+	  		socket.emit('needHomepageDatas', {});
+	  	}, 100);
+
+	  	setInterval(function()
+	  	{
+	  		socket.emit('needMessage', {});
+	  	}, timeBetweenNewMessage);
+
+	  	$('#addChannelButton').click(function()
+	  	{
+	  		socket.emit('addChannel', $('#channelName').prop('value').toLowerCase());
+	  	});
+	</script>
+
+</body>
+</html>
