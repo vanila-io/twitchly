@@ -8,7 +8,7 @@
 		    <div class="navbar-header">
 		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
 		        <i class="fa fa-bars"></i>
-		      </button>
+		      </button>est
 		      <a class="navbar-brand" href="#"><img src="img/logo.png" alt=""></a>
 		    </div>
 
@@ -62,7 +62,7 @@
 		var socket = io.connect('<%= env.url %>');
 		var numberOfMessagesDisplayed = 10;
 		var timeBetweenNewMessage = 1000;
-		
+
 		var lastId = 0;
 		var lastMessage = '';
 
@@ -83,7 +83,7 @@
 	    	for (var channel in data.channels)
 			{
 			    if(!data.channels.hasOwnProperty(channel)) continue;
-			    
+
 			    channels.append('<h2><a href="/' + channel.substr(1) + '">' + channel + '</a></h2>');
 			    channels.append('<p>Number of messages: ' + data.channels[channel].now.numberOfMessages + '</p>');
 				channels.append('<p>Number of messages per minutes: ' + data.channels[channel].now.messagesPerMinute + '</p>');
@@ -105,7 +105,7 @@
 	  		var string = '<div id="message-' + lastId + '">';
 	  		string += '<' + message.channel + '> ';
 	  		if(!message.user['display-name'] || message.user['display-name'] == null || message.user['display-name'] === 'null')
-	  			string += '<strong>' + message.user['username']  + '</strong>: ';	
+	  			string += '<strong>' + message.user['username']  + '</strong>: ';
 	  		else
 	  			string += '<strong>' + message.user['display-name']  + '</strong>: ';
 	  		string += message.message + '<br /></div>';
