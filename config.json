@@ -13,13 +13,13 @@
 	"web-engine":
 	{
 		"serve-port": 8080,
-		"url": "https://twitter-imote.c9users.io",
+		"url": "http://159.203.64.62/",
 		"socketio-port": 80
 	},
 	"twitch":
 	{
-		"username": "",
-		"oauth-password": ""
+		"username": "kinderjaje",
+		"oauth-password": "oauth:13lhdbzhxv2z31qytq6f5cthjzfyzv"
 	},
 	"debug-mode": false
 }
