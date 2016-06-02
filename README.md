@@ -1,6 +1,14 @@
-# Twitch Chat Stats
+# Twitchly.co - Twitch Chat Monitor
 
-créer collection liste de jeux
-l'alimenter
-l'afficher dans browser
-et quand on veut liste les channels par type de jeu : chercher dans les metadata les bonne entrées et les afficher
+
+
+**Twitchly** is side project of Vanila Team which monitor twhich chat channels and provide some stats.
+
+Main idea for this project was to get idea how fast twitch chat is, or whats most popular word.
+
+As being on Twitch Chat last 5 years 24/7, I (Stefan Smiljkovic), wanted to extract some interesting stats from twitch chat.
+
+With 100+ milion monthly unqiue users, Twitch can be great platform to analyze and experiment.
+
+
+
