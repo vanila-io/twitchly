@@ -12,6 +12,9 @@ With 100+ milion monthly unqiue users, Twitch can be great platform to analyze a
 
 ---
 
+## Demo
+To see current demo in action go to http://twitchly.co
+
 ## Features
 - Total message counting from the start of the app
 - Average chat speed (messages/second)
