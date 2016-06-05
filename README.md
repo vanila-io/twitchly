@@ -26,3 +26,16 @@ To see current demo in action go to http://twitchly.co
 - Can't remember others, but will soon
 
 ## Install
+* First, you need the latest Node.js (LTS or mainstream) with NPM.
+* Clone the repository.
+* Run ```npm install```.
+* Copy ```config.default.json``` to ```config.json``` or open ```config.json``` if it already exist.
+* Edit the configuration file according to your needs :
+    * Events channel is an array defining which channels are classified as events and are hosted on differents servers.
+    * ```serve-port``` define the public http port.
+    * ```socketio-port``` define the ```Socket.io``` listening port (usually same as ```serve-port```)
+    * ```url``` define on which url your app will be reachable.
+    * ```twitch username``` is your username on twitch
+    * ```twitch oauth-password" is your token. You can get yours at [http://www.twitchapps.com/tmi/](http://www.twitchapps.com/tmi/).
+    * ```debug-mode" let you show more info into the console.
+* Then you may be able to run the app with ```node main.js```.
