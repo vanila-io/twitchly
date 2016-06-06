@@ -27,7 +27,7 @@ To see current demo in action go to http://twitchly.co
 
 ## Install
 * First, you need the latest Node.js (LTS or mainstream) with NPM.
-* Then, you need to have MongoDB up and running (see [official site](https://www.mongodb.com) for instructions.)
+* Then, you need to have MongoDB up and running (see [official site](https://www.mongodb.com) for instructions).
 * Clone the repository.
 * Run ```npm install```.
 * Copy ```config.default.json``` to ```config.json``` or open ```config.json``` if it already exist.
