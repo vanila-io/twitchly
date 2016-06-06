@@ -36,6 +36,6 @@ To see current demo in action go to http://twitchly.co
     * ```socketio-port``` define the ```Socket.io``` listening port (usually same as ```serve-port```)
     * ```url``` define on which url your app will be reachable.
     * ```twitch username``` is your username on twitch
-    * ```twitch oauth-password```` is your token. You can get yours at [http://www.twitchapps.com/tmi/](http://www.twitchapps.com/tmi/).
-    * ```debug-mode```` let you show more info into the console.
+    * ```twitch oauth-password``` is your token. You can get yours at [http://www.twitchapps.com/tmi/](http://www.twitchapps.com/tmi/).
+    * ```debug-mode``` let you show more info into the console.
 * Then you may be able to run the app with ```node main.js```.
