@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/jshint/bin/jshint ."
   },
   "author": "",
   "license": "ISC",
@@ -14,5 +14,8 @@
     "mongoose": "^4.4.3",
     "socket.io": "^1.4.5",
     "tmi.js": "0.0.26"
+  },
+  "devDependencies": {
+    "jshint": "^2.9.2"
   }
 }
