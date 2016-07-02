@@ -1,0 +1,25 @@
+{
+  "esversion": 6,
+  "camelcase": true,
+  "curly": true,
+  "eqeqeq": true,
+  "quotmark": "single",
+  "unused": true,
+  "strict": true,
+  "maxlen": 120,
+  "varstmt": true,
+  "indent": 4,
+  "white": false,
+
+  "asi": false,
+  "boss": false,
+  "evil": false,
+  "funcscope": false,
+  "shadow": false,
+  "sub": false,
+  "supernew": false,
+  "validthis": false,
+
+  "node": true,
+  "globals": {}
+}
