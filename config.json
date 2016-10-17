@@ -12,14 +12,15 @@
 	},
 	"web-engine":
 	{
-		"serve-port": 8080,
-		"url": "http://159.203.64.62/",
-		"socketio-port": 80
+		"serve-port": 3000,
+		"url": "http://127.0.0.1/",
+		"socketio-port": 30000
 	},
 	"twitch":
 	{
 		"username": "kinderjaje",
 		"oauth-password": "oauth:13lhdbzhxv2z31qytq6f5cthjzfyzv"
+		
 	},
 	"debug-mode": false
 }

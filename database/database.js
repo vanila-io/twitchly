@@ -9,16 +9,25 @@ let ChannelMetadataOverTime = require('./channel_metadata_over_time.js');
 let ChannelStats = require('./channel_stats.js');
 let GameList = require('./game_list.js');
 
+
+
 let d = class Database
 {
 	static connect()
 	{
+		
 		mongoose.connect('mongodb://localhost/twitch');
+		
 		Database.firstTimeRun();
 		
 		GameList.find({}, function(err, docs)
 		{
-			if(err) throw err;
+			if(err)
+			{
+				
+				throw err;
+			} 
+			
 			Database.gameList = docs;
 		});
 	}
@@ -162,7 +171,7 @@ let d = class Database
 		{
 			if(err)
 			{
-				console.log(err);
+				console.log(err + 'first time run error');
 				return;
 			}
 

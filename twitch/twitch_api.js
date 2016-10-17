@@ -1,77 +1,90 @@
 'use strict';
 
 const https = require('https');
+const requests = require('request');
 
 class TwitchAPI
 {
     static getStreamList(limit, callback)
     {
-        let response = '';
         
-        https.get('https://api.twitch.tv/kraken/streams?limit=' + limit, (res) =>
-    	{
-    		res.on('data', (d) => response += d);
-    		res.on('end', () => 
-    		{
-    		    try
-    		    {
-    			    response = JSON.parse(response);
-    		    } catch(e)
-    		    {
-    		        if(!e) e = true;
-    		        callback(e, null);
-    		    }
-    		    
-                callback(null, response);
-    		});
-        });
+		var options = {
+		url: 'https://api.twitch.tv/kraken/streams?limit=' + limit ,
+		headers: {'Client-ID': '2bfy7nap1hrgsdy9rnuv2rwf28kliy7'}
+		};
+		
+		function callB(error, response, body){
+			if(error )
+			{
+				console.log(error);
+				
+			}
+			else
+			{
+				var info = JSON.parse(body);
+				callback(null, info);
+				
+			}
+		}
+
+		requests(options, callB);
+       
     }
+
     
     static getTopGames(limit, callback)
     {
 
-        let response = '';
+        
+		var options = {
+		url: 'https://api.twitch.tv/kraken/games/top?limit=' + limit ,
+		headers: {'Client-ID': '2bfy7nap1hrgsdy9rnuv2rwf28kliy7'}
+		};
+		
+
+		function callB(error, response, body){
+			if(error )
+			{
+				console.log(error);
+				
+			}
+			else
+			{
+				var info = JSON.parse(body);
+				callback(null, info);
+				
+			}
+		}
+
+		requests(options, callB);
             
-        https.get('https://api.twitch.tv/kraken/games/top?limit=' + limit, (res) =>
-        {
-        	res.on('data', (d) => response += d);
-        	res.on('end', () => 
-        	{
-        	    try
-        	    {
-        		    response = JSON.parse(response);
-                } catch(e)
-        	    {
-        	        if(!e) e = true;
-                    callback(e, null);
-        	    }
-        	    
-                callback(null, response);
-        	});
-        });
     }
     
     static getTopStreamsByGame(game, limit, callback)
     {
-        let response = '';
         
-        https.get('https://api.twitch.tv/kraken/streams?game=' + game + '&limit=' + limit, (res) =>
-    	{
-    		res.on('data', (d) => response += d);
-    		res.on('end', () => 
-    		{
-    		    try
-    		    {
-    			    response = JSON.parse(response);
-    		    } catch(e)
-    		    {
-    		        if(!e) e = true;
-    		        callback(e, null);
-    		    }
-    		    
-                callback(null, response);
-    		});
-        });
+		var options = {
+		url: 'https://api.twitch.tv/kraken/streams?game=' + game  + '&limit=' + limit ,
+		headers: {'Client-ID': '2bfy7nap1hrgsdy9rnuv2rwf28kliy7'}
+		};
+
+		function callB(error, response, body){
+			if(error )
+			{
+				console.log(error);
+				
+			}
+			else
+			{
+				var info = JSON.parse(body);
+				callback(null, info);
+				
+			}
+		}
+
+		requests(options, callB);
+        
+       
     }
 };
 
