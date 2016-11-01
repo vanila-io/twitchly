@@ -10,10 +10,13 @@ let StatsManager = require('./stats_engine/stats_manager.js');
 let Database = require('./database/database.js');
 Database.connect();
 
-let s = new StatsManager(config.twitch.username, config.twitch['oauth-password'], true, config);
+let s = new StatsManager(config.twitch.username, config.twitch['oauth-password'], false, config);
 
 let WebManager = require('./web_display/web_manager.js');
+
 let web = new WebManager(s, config);
+
+
 
 function start()
 {
@@ -34,6 +37,7 @@ function start()
 
 
 			for(let stream of res.streams)
+				
 				s.addChannel(stream);
 
 			console.log('New TOP stream list.');
@@ -50,7 +54,6 @@ function start()
 
 			if(!res.top || res.top.length === 0)
 			{
-				console.log(res);
 				return;
 			} 
 

@@ -13,14 +13,15 @@
 	"web-engine":
 	{
 		"serve-port": 3000,
-		"url": "http://127.0.0.1/",
-		"socketio-port": 30000
+		"url": "http://127.0.0.1",
+		"socketio-port": 3000
 	},
 	"twitch":
 	{
-		"username": "kinderjaje",
-		"oauth-password": "oauth:13lhdbzhxv2z31qytq6f5cthjzfyzv"
+		"username": "mcole1976",
+		"oauth-password": "oauth:46jugtt7kvzg4vpam158o6nbux28d4"
 		
 	},
-	"debug-mode": false
+	"debug-mode": false,
+	"Client-Id":  "2bfy7nap1hrgsdy9rnuv2rwf28kliy7"
 }

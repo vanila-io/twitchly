@@ -17,7 +17,6 @@ let s = class StatsManager
 		this.clientManager = new IRCManager(config);
 		this.clientManager.on('newClient', (client) =>
 		{
-			console.log('new client');
 			client.on('chat', (a, b, c, d) => { self.onChat(a, b, c, d); } );
 			client.on('disconnected', function()
 			{
@@ -57,13 +56,16 @@ let s = class StatsManager
 	
 	addChannel(channel)
 	{
+		
 		let name = '#' + channel.channel.name;
 		
 		if(this.channels[name])
 			return;
 		
 		this.clientManager.addChannel(name);
+		
 		this.channels[name] = new ChannelStats(channel);
+
 		this.channelNumber += 1;
 		console.log('We have ' + this.channelNumber + ' channels.');
 	}
@@ -166,6 +168,7 @@ let s = class StatsManager
 
 	onChat(channel, user, message, self)
 	{
+
 		this.messageCount += 1;
 
 		if(this.channels[channel])

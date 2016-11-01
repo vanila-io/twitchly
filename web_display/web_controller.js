@@ -19,7 +19,8 @@ class WebController extends Controller
 
     /* Index. Route: '/' */
     'index'(req, res)
-    {
+    {   
+        
         let socketIoUrl = this.config['web-engine'].url;
         
         if(this.config['web-engine']['socketio-port'] !== 80)
@@ -160,7 +161,7 @@ class WebController extends Controller
 			}
 
 			this.socket.emit('channelStatsInMultipleInterval', result);
-			console.log(result);
+			
 		};
 
 		this.database.retrieveChannelStatsInInterval(dates[0].from, dates[0].to, message.channelName, channelsStatsInMultipleIntervalCallback);

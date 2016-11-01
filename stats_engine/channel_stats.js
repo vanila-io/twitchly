@@ -46,7 +46,6 @@ let c = class ChannelStats
 	onChat(user, message, self)
 	{
 		this.messageCount += 1;
-
 		this.wordStats.computeMessage(message);
 		this.speakerStats.addWord(user['display-name']);
 		this.chatSpeed.addTick();

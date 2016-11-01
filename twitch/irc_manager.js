@@ -1,7 +1,7 @@
 'use strict';
 
 let irc = require("tmi.js");
-const EventEmitter = require('events');
+const EventEmitter = require('events');	
 
 /* This component is here to manage every IRC connection to TMI Twitch.
  * We will have several connections to it to be able to manage every channels.
@@ -22,13 +22,13 @@ class IRCManager extends EventEmitter
         super();
         
         this.options = config;
-        
         // Regular channels
         this.options.main =
         {
             options:
 			{
 				debug: config['debug-mode'],
+				clientId : '2bfy7nap1hrgsdy9rnuv2rwf28kliy7'
 			},
 			connection:
 			{
@@ -47,6 +47,7 @@ class IRCManager extends EventEmitter
             options:
 			{
 				debug: config['debug-mode'],
+				clientId : '2bfy7nap1hrgsdy9rnuv2rwf28kliy7'
 			},
 			connection:
 			{
@@ -72,7 +73,8 @@ class IRCManager extends EventEmitter
         let self = this;
         
         let channelType = '';
-        
+
+		        
 		if(this.options['stats-engine']['event-channels'].indexOf(channel) !== -1)
 			channelType = 'event';
 		else channelType = 'main';
@@ -88,14 +90,15 @@ class IRCManager extends EventEmitter
 		}
 		else if(clientsArray[lastIndex] && !clientsArray[clientsArray.length - 1].ready)
 		{
+			
 			this.waitingChannels.push(channel);
+			
 		}
 		else
 		{
+
 			clientsArray.push( { count: 0, ready: false, client: new irc.client(channelType === 'main' ? this.options.main : this.options.event) } );
-		
-		    lastIndex = clientsArray.length - 1;
-			
+		    lastIndex = clientsArray.length - 1;	
 			clientsArray[lastIndex].client.connect().then(function(data)
 			{
 			    self.emit('newClient', clientsArray[lastIndex].client);

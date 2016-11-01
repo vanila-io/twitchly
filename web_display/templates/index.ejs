@@ -62,23 +62,46 @@
 		var socket = io.connect('<%= env.url %>');
 		var numberOfMessagesDisplayed = 10;
 		var timeBetweenNewMessage = 1000;
-
+		//console.log('<%= env.url %>');
 		var lastId = 0;
 		var lastMessage = '';
 
 		socket.on('homepageDatas', function (data)
 		{
+						
+			// JQUERY Mapping code:  Had some issue with the mapping working so as we have JQuery statically I have left this in.
+
+			//var chan = {};
+			//var chanArray = [];
+			//chan = data.channels;
+			//var x = chan.length;
+
+			//console.log(chan);
+			//$.each(chan ,function(key, val){
+			//	if( typeof val ==='object')
+			//	{
+			//		console.log(val);
+			//		chanArray.push(val);
+			//	}
+			//	else
+			//	{
+
+			//		console.log(key);
+			//	}
+			//});
+			
+
 	    	$('#nom').text(data.global.now['numberOfMessages']);
 	    	$('#nompm').text(data.global.now['messagesPerMinute']);
 	    	$('#nomps').text(Math.round(data.global.now['messagesPerMinute'] / 60));
 	    	$('#mpw').text(data.global.now['mostPopularWord']);
 	    	$('#map').text(data.global.now['mostActiveSpeaker']);
-
 	    	$('#nom2').text(data.global.overall['numberOfMessages'] + data.global.now['numberOfMessages']);
 	    	$('#nompm2').text(data.global.overall['messagesPerMinute']);
-
 	    	var channels = $('#channels');
 	    	channels.text('');
+
+			
 
 	    	for (var channel in data.channels)
 			{
@@ -96,9 +119,11 @@
 
 	  	socket.on('message', function(message)
 	  	{
+		  	console.log('in message');
+
+			
 	  		if(lastMessage == message.message)
 	  			return;
-
 	  		lastMessage = message.message;
 	  		lastId += 1;
 	  		var div = $('#lastMessages');
@@ -127,6 +152,7 @@
 	  	{
 	  		socket.emit('addChannel', $('#channelName').prop('value').toLowerCase());
 	  	});
+
 	</script>
 
 </body>

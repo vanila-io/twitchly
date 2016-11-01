@@ -12,9 +12,9 @@
     "ejs": "^2.4.1",
     "express": "^4.13.4",
     "mongoose": "^4.4.3",
+    "request": "^2.75.0",
     "socket.io": "^1.4.5",
-    "tmi.js": "0.0.26",
-    "request": "^2.75.0"
+    "tmi.js": "^1.1.2"
   },
   "devDependencies": {
     "jshint": "^2.9.2"

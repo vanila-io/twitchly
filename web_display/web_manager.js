@@ -16,7 +16,6 @@ class WebManager extends WebController
 		let server = http.Server(ExpressApp);
 		
 		super(statsManager, config, io(server));
-		
 		this.ExpressApp = ExpressApp;
 		
 		let self = this;
